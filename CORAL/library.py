@@ -8,29 +8,29 @@ import os
 
 import yaml
 from simpy import Resource
-from ORBIT.core.library import loader
+from ORBIT.core.library import loader, default_library
 
 
 class SharedLibrary:
     """Class used to model shared library resources for ORBIT simulations."""
 
-    def __init__(self, env, path, allocations):
+    def __init__(self, env, allocations, path=None):
         """
         Creates an instance of `SharedLibrary`.
 
         Parameters
         ----------
         path : str
-            Path to library items.
+            Path to shared resource library.
         allocations : dict
             Number of each library item that exists in the shared environment.
         """
 
         self.env = env
-        self._path = path
         self._alloc = allocations
         self._resources = {}
 
+        self.initialize_library_path(path)
         self.initialize_shared_resources()
 
     @property
@@ -39,6 +39,22 @@ class SharedLibrary:
 
         return self._resources
 
+    def initialize_library_path(self, path):
+        """
+        Initialize library path at `path` or default ORBIT library is `None`.
+
+        Parameters
+        ----------
+        path : str
+            Path to shared resource library.
+        """
+
+        if path is None:
+            self._path = default_library
+
+        else:
+            self._path = path
+
     def initialize_shared_resources(self):
         """Initializes shared resources in `self._alloc`."""
 
@@ -46,8 +62,17 @@ class SharedLibrary:
             for key, (name, cap) in cat_items.items():
 
                 path = os.path.join(self._path, cat_name, f"{name}.yaml")
-                resource = SharedResourceSet(self.env, path, cap)
-                self._resources[key] = resource
+
+                try:
+                    resource = SharedResourceSet(self.env, path, cap)
+                    self._resources[key] = resource
+
+                except FileNotFoundError:
+                    print(
+                        f"Warning: Data not found for shared resource '{name}'."
+                        f" Verify data file is present at '{path}'"
+                    )
+                    continue
 
 
 class SharedResourceSet:

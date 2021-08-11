@@ -15,7 +15,7 @@ from .library import SharedLibrary
 class GlobalManager:
     """Class to manage concurrent ORBIT simulations with shared resources."""
 
-    def __init__(self, configs, library_path, allocations):
+    def __init__(self, configs, allocations, library_path=None):
         """
         Creates an instance of `GlobalManager`.
 
@@ -30,11 +30,10 @@ class GlobalManager:
         """
 
         self.configs = [deepcopy(config) for config in configs]
-        self._path = library_path
         self._alloc = allocations
 
         self.initialize_shared_environment()
-        self.library = SharedLibrary(self.env, self._path, self._alloc)
+        self.library = SharedLibrary(self.env, self._alloc, path=library_path)
         self.projects = []
 
     def initialize_shared_environment(self):
@@ -66,7 +65,11 @@ class GlobalManager:
         """
 
         keys = [k for k in list(config) if k in list(self.library.resources)]
-        resources = [self.library.resources[k] for k in keys]
+        resources = [
+            self.library.resources[k]
+            for k in keys
+            if config[k] == "_shared_pool_"
+        ]
         requests = [resource.router.request() for resource in resources]
 
         yield self.env.all_of(requests)
