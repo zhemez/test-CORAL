@@ -5,6 +5,7 @@ __email__ = "jake.nunemaker@nrel.gov"
 
 
 from copy import deepcopy
+from collections import Counter
 
 from ORBIT import ProjectManager
 from simpy import Environment
@@ -29,12 +30,31 @@ class GlobalManager:
             Number of each library item that exists in the shared environment.
         """
 
-        self.configs = [deepcopy(config) for config in configs]
+        self._logs = []
+        self._counter = Counter()
         self._alloc = allocations
+        self.configs = [deepcopy(config) for config in configs]
 
         self.initialize_shared_environment()
         self.library = SharedLibrary(self.env, self._alloc, path=library_path)
-        self.projects = []
+
+    @property
+    def logs(self):
+        """Return post-processed logs."""
+
+        processed = []
+        for log in self._logs:
+
+            new = deepcopy(log)
+            for key, value in log.items():
+                if key.startswith("request-"):
+                    new[f"delay-{key.replace('request-', '')}"] = (
+                        value - new["Initialized"]
+                    )
+
+            processed.append(new)
+
+        return processed
 
     def initialize_shared_environment(self):
         """Initializes `simpy.Environment` for managing shared resources."""
@@ -44,25 +64,51 @@ class GlobalManager:
     def setup(self):
         """Initialize the projects."""
 
-        for i, config in enumerate(self.configs):
-            self.env.process(self._run_project(i, config))
+        for config in self.configs:
+
+            name = self._get_unique_name(config.pop("project_name", "Project"))
+            start = config.pop("project_start", 0)
+
+            self.env.process(self._run_project(name, start, config))
+
+    def _get_unique_name(self, name):
+        """
+        Returns a unique name based on instances in `self._counter`.
+
+        Parameters
+        ----------
+        name : str
+            Base name.
+        """
+
+        self._counter[name] += 1
+        if self._counter[name] == 1 and name != "Project":
+            return name
+
+        return f"{name} {self._counter[name]}"
 
     def run(self):
         """Main simulation run method."""
 
         self.env.run()
 
-    def _run_project(self, i, config):
+    def _run_project(self, name, start, config):
         """
         Run an individual project configuration.
 
         Parameters
         ----------
-        i : int
-            Project number. TODO: Make this more flexible.
+        name : str
+            Project handle.
+        start : int | float
+            Time to initialize project.
         config : dict
             ORBIT configuration.
         """
+
+        log = {"name": name}
+        yield self.env.timeout(start)
+        log["Initialized"] = self.env.now
 
         keys = [k for k in list(config) if k in list(self.library.resources)]
         resources = [
@@ -73,17 +119,25 @@ class GlobalManager:
         requests = [resource.router.request() for resource in resources]
 
         yield self.env.all_of(requests)
-        print(f"Project {i} starting at {self.env.now}.")
+        log["Started"] = self.env.now
 
         for key, resource in zip(keys, resources):
             config[key] = resource.data
 
         project = ProjectManager(config)
         project.run()
-        self.projects.append(project)
 
         yield self.env.timeout(project.project_time)
-        print(f"Project {i} done at {self.env.now}.")
+        log["Finished"] = self.env.now
+        self._logs.append(
+            {
+                **log,
+                **{
+                    f"request-{k}": v.usage_since
+                    for k, v in zip(keys, requests)
+                },
+            }
+        )
 
         for resource, request in zip(resources, requests):
             resource.router.release(request)
