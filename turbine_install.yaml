@@ -1,0 +1,11 @@
+design_phases: []
+feeder: _shared_pool_
+install_phases:
+- TurbineInstallation
+num_feeders: 2
+plant: {}
+site:
+  depth: 20
+  distance: 40
+turbine: 12MW_generic
+wtiv: _shared_pool_
