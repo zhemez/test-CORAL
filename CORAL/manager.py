@@ -7,6 +7,7 @@ __email__ = "jake.nunemaker@nrel.gov"
 from copy import deepcopy
 from collections import Counter
 
+import numpy as np
 from ORBIT import ProjectManager
 from simpy import Environment
 
@@ -16,7 +17,7 @@ from .library import SharedLibrary
 class GlobalManager:
     """Class to manage concurrent ORBIT simulations with shared resources."""
 
-    def __init__(self, configs, allocations, library_path=None):
+    def __init__(self, configs, allocations, weather=None, library_path=None):
         """
         Creates an instance of `GlobalManager`.
 
@@ -32,6 +33,7 @@ class GlobalManager:
 
         self._logs = []
         self._counter = Counter()
+        self._weather = weather
         self._alloc = allocations
         self.configs = [deepcopy(config) for config in configs]
 
@@ -124,7 +126,8 @@ class GlobalManager:
         for key, resource in zip(keys, resources):
             config[key] = resource.data
 
-        project = ProjectManager(config)
+        weather = self._get_current_weather()
+        project = ProjectManager(config, weather=weather)
         project.run()
 
         yield self.env.timeout(project.project_time)
@@ -141,3 +144,11 @@ class GlobalManager:
 
         for resource, request in zip(resources, requests):
             resource.router.release(request)
+
+    def _get_current_weather(self):
+        """Returns current weather based on `self.env.now`."""
+
+        if self._weather is None:
+            return None
+
+        return self._weather[int(np.ceil(self.env.now)) :]

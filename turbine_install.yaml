@@ -4,6 +4,7 @@ install_phases:
 - TurbineInstallation
 num_feeders: 2
 plant: {}
+port: _shared_pool_
 site:
   depth: 20
   distance: 40
