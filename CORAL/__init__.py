@@ -6,3 +6,4 @@ __email__ = "jake.nunemaker@nrel.gov"
 
 from .library import SharedLibrary
 from .manager import GlobalManager
+from .pipelines import Pipeline

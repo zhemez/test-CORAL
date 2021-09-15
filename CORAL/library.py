@@ -10,6 +10,8 @@ import yaml
 from simpy import Resource
 from ORBIT.core.library import loader, default_library
 
+CATEGORY_MAP = {"wtiv": "vessels", "feeder": "vessels", "port": "ports"}
+
 
 class SharedLibrary:
     """Class used to model shared library resources for ORBIT simulations."""
@@ -58,14 +60,20 @@ class SharedLibrary:
     def initialize_shared_resources(self):
         """Initializes shared resources in `self._alloc`."""
 
-        for cat_name, cat_items in self._alloc.items():
-            for key, (name, cap) in cat_items.items():
+        for key, data in self._alloc.items():
 
-                path = os.path.join(self._path, cat_name, f"{name}.yaml")
+            if isinstance(data, tuple):
+                data = [data]
+
+            category = CATEGORY_MAP.get(key, "")
+
+            resources = {}
+            for name, cap in data:
+                path = os.path.join(self._path, category, f"{name}.yaml")
 
                 try:
                     resource = SharedResourceSet(self.env, path, cap)
-                    self._resources[key] = resource
+                    resources[name] = resource
 
                 except FileNotFoundError:
                     print(
@@ -73,6 +81,8 @@ class SharedLibrary:
                         f" Verify data file is present at '{path}'"
                     )
                     continue
+
+            self._resources[key] = resources
 
 
 class SharedResourceSet:

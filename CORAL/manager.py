@@ -4,6 +4,7 @@ __maintainer__ = "Jake Nunemaker"
 __email__ = "jake.nunemaker@nrel.gov"
 
 
+import datetime as dt
 from copy import deepcopy
 from collections import Counter
 
@@ -36,9 +37,14 @@ class GlobalManager:
         self._weather = weather
         self._alloc = allocations
         self.configs = [deepcopy(config) for config in configs]
+        self._start = self._get_internal_start_date()
 
         self.initialize_shared_environment()
         self.library = SharedLibrary(self.env, self._alloc, path=library_path)
+
+    def _get_internal_start_date(self):
+        """Return minimum start_date (int or datetime). Used internally."""
+        return min([config["project_start"] for config in self.configs])
 
     @property
     def logs(self):
@@ -109,21 +115,31 @@ class GlobalManager:
         """
 
         log = {"name": name}
-        yield self.env.timeout(start)
+        if isinstance(start, dt.datetime):
+            idx = int(np.ceil((start - self._start).days * 24))
+
+        else:
+            idx = start
+
+        yield self.env.timeout(idx)
         log["Initialized"] = self.env.now
 
-        keys = [k for k in list(config) if k in list(self.library.resources)]
-        resources = [
-            self.library.resources[k]
-            for k in keys
-            if config[k] == "_shared_pool_"
-        ]
-        requests = [resource.router.request() for resource in resources]
+        resources = []
+        for k, v in config.items():
+            try:
+                if "_shared_pool_" in v:
+                    target = v.split(":")[1]
+                    resources.append((k, self.library.resources[k][target]))
+
+            except TypeError:
+                pass
+
+        requests = [resource.router.request() for _, resource in resources]
 
         yield self.env.all_of(requests)
         log["Started"] = self.env.now
 
-        for key, resource in zip(keys, resources):
+        for key, resource in resources:
             config[key] = resource.data
 
         weather = self._get_current_weather()
@@ -137,13 +153,13 @@ class GlobalManager:
                 **log,
                 **{
                     f"request-{k}": v.usage_since
-                    for k, v in zip(keys, requests)
+                    for (k, _), v in zip(resources, requests)
                 },
             }
         )
 
         for resource, request in zip(resources, requests):
-            resource.router.release(request)
+            resource[1].router.release(request)
 
     def _get_current_weather(self):
         """Returns current weather based on `self.env.now`."""
