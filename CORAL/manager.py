@@ -41,6 +41,7 @@ class GlobalManager:
 
         self.initialize_shared_environment()
         self.library = SharedLibrary(self.env, self._alloc, path=library_path)
+        self.setup()
 
     def _get_internal_start_date(self):
         """Return minimum start_date (int or datetime). Used internally."""
@@ -77,7 +78,7 @@ class GlobalManager:
             name = self._get_unique_name(config.pop("project_name", "Project"))
             start = config.pop("project_start", 0)
 
-            self.env.process(self._run_project(name, start, config))
+            self.env.process(self._initialize(name, start, config))
 
     def _get_unique_name(self, name):
         """
@@ -100,7 +101,7 @@ class GlobalManager:
 
         self.env.run()
 
-    def _run_project(self, name, start, config):
+    def _initialize(self, name, start, config):
         """
         Run an individual project configuration.
 
@@ -114,15 +115,53 @@ class GlobalManager:
             ORBIT configuration.
         """
 
-        log = {"name": name}
-        if isinstance(start, dt.datetime):
-            idx = int(np.ceil((start - self._start).days * 24))
-
-        else:
-            idx = start
-
+        idx = self._get_start_idx(start)
         yield self.env.timeout(idx)
-        log["Initialized"] = self.env.now
+        log = {"name": name, "Initialized": self.env.now}
+
+        resources = self._get_shared_resources(config)
+        requests = [resource.router.request() for _, resource in resources]
+
+        yield self.env.all_of(requests)
+        log["Started"] = self.env.now
+        for key, resource in resources:
+            config[key] = resource.data
+
+        project = self._run_project(config)
+        yield self.env.timeout(project.project_time)
+        log["Finished"] = self.env.now
+
+        self._logs.append(
+            self._append_request_timing(log, resources, requests)
+        )
+
+        for resource, request in zip(resources, requests):
+            resource[1].router.release(request)
+
+    def _get_start_idx(self, start) -> int:
+        """
+        Return index of project start time.
+
+        Parameters
+        ----------
+        start : float | dt.datetime
+            Project start time or datetime stamp.
+        """
+
+        if isinstance(start, dt.datetime):
+            return int(np.ceil((start - self._start).days * 24))
+
+        return int(np.ceil(start))
+
+    def _get_shared_resources(self, config):
+        """
+        Return shared resources identified in project config.
+
+        Parameters
+        ----------
+        config : dict
+            Initial ORBIT configuration.
+        """
 
         resources = []
         for k, v in config.items():
@@ -134,32 +173,45 @@ class GlobalManager:
             except TypeError:
                 pass
 
-        requests = [resource.router.request() for _, resource in resources]
+        return resources
 
-        yield self.env.all_of(requests)
-        log["Started"] = self.env.now
+    def _run_project(self, config):
+        """
+        Run configured ORBIT project.
 
-        for key, resource in resources:
-            config[key] = resource.data
+        Parameters
+        ----------
+        config : dict
+            Final ORBIT configuration.
+        """
 
         weather = self._get_current_weather()
         project = ProjectManager(config, weather=weather)
         project.run()
 
-        yield self.env.timeout(project.project_time)
-        log["Finished"] = self.env.now
-        self._logs.append(
-            {
-                **log,
-                **{
-                    f"request-{k}": v.usage_since
-                    for (k, _), v in zip(resources, requests)
-                },
-            }
-        )
+        return project
 
-        for resource, request in zip(resources, requests):
-            resource[1].router.release(request)
+    def _append_request_timing(self, log, resources, requests):
+        """
+        Add request timing information to project log.
+
+        Parameters
+        ----------
+        log : dict
+            Project log.
+        resources : list
+            List of shared resources.
+        requests : list
+            List of resource requests.
+        """
+
+        return {
+            **log,
+            **{
+                f"request-{k}": v.usage_since
+                for (k, _), v in zip(resources, requests)
+            },
+        }
 
     def _get_current_weather(self):
         """Returns current weather based on `self.env.now`."""

@@ -44,7 +44,6 @@ def test_separate_ports():
     configs = [config1, config2]
 
     manager = GlobalManager(configs, allocations, library_path=LIBRARY_PATH)
-    manager.setup()
     manager.run()
 
     assert manager.logs[0]["Finished"] == base_finished_time
@@ -70,7 +69,6 @@ def test_shared_ports_limited_resources():
     configs = [config1, config2]
 
     manager = GlobalManager(configs, allocations, library_path=LIBRARY_PATH)
-    manager.setup()
     manager.run()
 
     assert manager.logs[0]["Finished"] == base_finished_time
@@ -96,7 +94,6 @@ def test_shared_ports_sufficient_resources():
     configs = [config1, config2]
 
     manager = GlobalManager(configs, allocations, library_path=LIBRARY_PATH)
-    manager.setup()
     manager.run()
 
     assert manager.logs[0]["Finished"] == base_finished_time
