@@ -61,7 +61,18 @@ class GlobalManager:
                         value - new["Initialized"]
                     )
 
-            # if isinstance(self._start)
+            if isinstance(self._start, dt.datetime):
+                for k in ["Initialized", "Started", "Finished"]:
+                    idx = int(np.ceil(log[k]))
+                    new[f"Date {k}"] = self._start + dt.timedelta(hours=idx)
+
+                for k in log.keys():
+
+                    if k.startswith("request-"):
+                        idx = int(np.ceil(log[k]))
+                        new[f"{k}-date"] = self._start + dt.timedelta(
+                            hours=idx
+                        )
 
             processed.append(new)
 
