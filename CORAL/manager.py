@@ -12,7 +12,7 @@ import numpy as np
 from ORBIT import ProjectManager
 from simpy import Environment
 
-from .library import SharedLibrary
+from CORAL.library import SharedLibrary
 
 
 class GlobalManager:
@@ -60,6 +60,8 @@ class GlobalManager:
                     new[f"delay-{key.replace('request-', '')}"] = (
                         value - new["Initialized"]
                     )
+
+            # if isinstance(self._start)
 
             processed.append(new)
 
