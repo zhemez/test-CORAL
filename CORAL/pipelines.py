@@ -4,8 +4,10 @@ __maintainer__ = "Jake Nunemaker"
 __email__ = "jake.nunemaker@nrel.gov"
 
 
+import re
 from copy import deepcopy
 
+import numpy as np
 import pandas as pd
 from ORBIT import load_config
 
@@ -26,8 +28,27 @@ class Pipeline:
         """
 
         self.projects = pd.read_csv(projects_fp, parse_dates=["start_date"])
+        self.append_num_turbines()
         self.base = load_config(base_config)
         self.configs = self.build_configs()
+
+    def append_num_turbines(self):
+        """
+        Append the number of turbines if missing. Calculated with project and
+        turbine capacity.
+        """
+
+        if "num_turbines" not in self.projects:
+
+            self.projects["_cap"] = self.projects["turbine"].apply(
+                lambda x: float(re.search(r"\d+", x).group(0))
+            )
+            self.projects["num_turbines"] = (
+                self.projects["capacity"] / self.projects["_cap"]
+            )
+            self.projects["num_turbines"] = self.projects[
+                "num_turbines"
+            ].apply(lambda x: int(np.ceil(x)))
 
     def build_configs(self):
         """Iterate through projects in `self.projects` and build ORBIT configs."""
