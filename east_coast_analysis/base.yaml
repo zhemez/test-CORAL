@@ -15,17 +15,16 @@ export_cable_install_vessel: example_cable_lay_vessel
 export_cable_bury_vessel: example_cable_lay_vessel
 oss_install_vessel: example_heavy_lift_vessel
 spi_vessel: example_scour_protection_vessel
-wtiv: _shared_pool_:example_wtiv
 # Module Specific
 OffshoreSubstationInstallation:
   feeder: example_heavy_feeder
   num_feeders: 1
 array_system_design:
   cables:
-  - XLPE_630mm_33kV
-  - XLPE_400mm_33kV
+  - XLPE_185mm_66kV
+  - XLPE_630mm_66kV
 export_system_design:
-  cables: XLPE_500mm_132kV
+  cables: XLPE_1000mm_220kV
   percent_added_length: 0.0
 scour_protection_design:
   cost_per_tonne: 40
@@ -36,6 +35,8 @@ design_phases:
 - ExportSystemDesign
 - OffshoreSubstationDesign
 install_phases:
-  ArrayCableInstallation: 0
-  ExportCableInstallation: 0
+  ArrayCableInstallation: !!python/tuple
+  - MonopileInstallation
+  - 1.0
+  ExportCableInstallation: 0   # Indexed by OSS Install
   OffshoreSubstationInstallation: 0

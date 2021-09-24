@@ -97,11 +97,20 @@ class Pipeline:
             ]
 
             # Install Phases
-            config["install_phases"]["ScourProtectionInstallation"] = 0
             config["install_phases"]["MonopileInstallation"] = 0
-            config["install_phases"]["TurbineInstallation"] = 0
-            # config["install_phases"]["MonopileInstallation"] = ("ScourProtectionInstallation", 0.5)
-            # config["install_phases"]["TurbineInstallation"] = ("MonopileInstallation", 0.2)
+            config["install_phases"]["ScourProtectionInstallation"] = ('MonopileInstallation', 1.)
+            config["install_phases"]["TurbineInstallation"] = ('MonopileInstallation', 1.)
+            
+            # Vessels
+            config["wtiv"] = "_shared_pool_:example_wtiv"
+            config["feeder"] = "_shared_pool_:example_feeder"
+            config["num_feeders"] = 2
+
+        elif substructure == "jacket":
+            raise TypeError(f"Substructure type 'jacket' not supported.")
+
+        elif substructure == "gbf":
+            raise TypeError(f"Substructure type 'gbf' not supported.")
 
         else:
             raise TypeError(f"Substructure '{substructure}' not supported.")
