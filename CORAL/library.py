@@ -7,7 +7,7 @@ __email__ = "jake.nunemaker@nrel.gov"
 import os
 
 import yaml
-from simpy import Event, Resource
+from simpy import Resource
 from ORBIT.core.library import loader, default_library
 
 CATEGORY_MAP = {"wtiv": "vessels", "feeder": "vessels", "port": "ports"}
@@ -36,23 +36,6 @@ class SharedLibrary:
 
         self.initialize_library_path(path)
         self.initialize_shared_resources()
-
-    def setup(self):
-        """Setup shared library infrastructure."""
-
-        self.trigger = Event(self.env)
-        self.env.process(self._initialize())
-
-    def _initialize(self):
-        """Initialize shared library request trigger."""
-
-        while True:
-
-            self.update_triggers(self.trigger)
-            yield self.trigger
-            self.trigger = Event(self.env)
-            self.update_triggers(self.trigger)
-            self.check_requests()
 
     @property
     def resources(self):
@@ -100,6 +83,28 @@ class SharedLibrary:
         self._requests.append(request)
         self.check_requests()
 
+        return {
+            k: self.resources[k][v].data for k, v in request.resources.items()
+        }
+
+    def release(self, request):
+        """
+        Release requests of `SharedResources` associated with MultiRequest
+        `request`.
+
+        Parameters
+        ----------
+        request : MultiRequest
+        """
+
+        for k, v in request.resources.items():
+
+            try:
+                self.resources[k][v].release(request.requests[k])
+
+            except RuntimeError:
+                pass
+
     def check_requests(self):
         """
         Check unprocessed requests for any projects that can start. This method
@@ -119,14 +124,7 @@ class SharedLibrary:
                     k: self.resources[k][v].request()
                     for k, v in request.resources.items()
                 }
-                request.objects = {
-                    k: self.resources[k][v]
-                    for k, v in request.resources.items()
-                }
-                request.resource_data = {
-                    k: self.resources[k][v].data
-                    for k, v in request.resources.items()
-                }
+
                 self._processed.append(request)
 
                 try:
@@ -151,19 +149,6 @@ class SharedLibrary:
         else:
             self._path = path
 
-    def update_triggers(self, event):
-        """
-        Append new `event` trigger to all shared resources.
-
-        Parameters
-        ----------
-        event : simpy.Event
-            Event to use as a trigger.
-        """
-
-        for resource in self.resource_list:
-            resource.notify = event
-
     def initialize_shared_resources(self):
         """Initializes shared resources in `self._alloc`."""
 
@@ -179,7 +164,9 @@ class SharedLibrary:
                 path = os.path.join(self._path, category, f"{name}.yaml")
 
                 try:
-                    resource = SharedResource(self.env, cap, path)
+                    resource = SharedResource(
+                        self.env, cap, path, self.check_requests
+                    )
                     resources[name] = resource
 
                 except FileNotFoundError:
@@ -195,7 +182,7 @@ class SharedLibrary:
 class SharedResource(Resource):
     """Class to represent a shared set of resources."""
 
-    def __init__(self, env, capacity, path, notify=None):
+    def __init__(self, env, capacity, path, callback=None):
         """
         Creates an instance of `SharedResource`.
 
@@ -207,13 +194,13 @@ class SharedResource(Resource):
             Number of resources in the shared resource set.
         path : str
             Path to library item
-        notify : simpy.Event | None
-            Event to notify on resource release.
+        callback : simpy.Event | None
+            Function to call on successful resource release.
         """
 
         super().__init__(env, capacity)
         self.load_data(path)
-        self.notify = notify
+        self.callback = callback
 
     def load_data(self, path):
         """Load library data for eventual insert into ORBIT config."""
@@ -236,5 +223,5 @@ class SharedResource(Resource):
         # TODO: Error handling if request doesn't exist?
 
         super().release(req)
-        if self.notify is not None:
-            self.notify.succeed()
+        if self.callback is not None:
+            self.callback()

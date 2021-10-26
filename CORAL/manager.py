@@ -31,7 +31,6 @@ class MultiRequest:
 
         self.trigger = Event(env)
         self.resources = resources
-        self.data = None
         self.name = name
 
     def __str__(self) -> str:
@@ -64,7 +63,6 @@ class GlobalManager:
 
         self.initialize_shared_environment()
         self.library = SharedLibrary(self.env, self._alloc, path=library_path)
-        self.library.setup()
         self.setup()
 
     def _get_internal_start_date(self):
@@ -79,24 +77,10 @@ class GlobalManager:
         for log in self._logs:
 
             new = deepcopy(log)
-            for key, value in log.items():
-                if key.startswith("request-"):
-                    new[f"delay-{key.replace('request-', '')}"] = (
-                        value - new["Initialized"]
-                    )
-
             if isinstance(self._start, dt.datetime):
                 for k in ["Initialized", "Started", "Finished"]:
                     idx = int(np.ceil(log[k]))
                     new[f"Date {k}"] = self._start + dt.timedelta(hours=idx)
-
-                for k in log.keys():
-
-                    if k.startswith("request-"):
-                        idx = int(np.ceil(log[k]))
-                        new[f"{k}-date"] = self._start + dt.timedelta(
-                            hours=idx
-                        )
 
             processed.append(new)
 
@@ -158,11 +142,12 @@ class GlobalManager:
 
         resources = self._get_shared_resources(config)
         request = MultiRequest(self.env, dict(resources), name)
-        self.library.request(request)
 
+        resource_data = self.library.request(request)
         yield request.trigger
+
         log["Started"] = self.env.now
-        for key, data in request.resource_data.items():
+        for key, data in resource_data.items():
             config[key] = data
 
         project = self._run_project(config)
@@ -170,14 +155,7 @@ class GlobalManager:
         log["Finished"] = self.env.now
 
         self._logs.append(log)
-
-        for k, req in request.requests.items():
-
-            try:
-                request.objects[k].release(req)
-
-            except RuntimeError:
-                pass
+        self.library.release(request)
 
     def _get_start_idx(self, start) -> int:
         """
