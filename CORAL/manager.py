@@ -10,9 +10,31 @@ from collections import Counter
 
 import numpy as np
 from ORBIT import ProjectManager
-from simpy import Environment
+from simpy import Event, Environment
 
 from CORAL.library import SharedLibrary
+
+
+class MultiRequest:
+    """Object used to hold multiple simpy.Requests and interface with
+    `SharedLibrary` instance."""
+
+    def __init__(self, env, resources, name):
+        """
+        Creates an instance of `MultiRequest`.
+
+        Parameters
+        ----------
+        env : simpy.Environment
+        resources : dict
+        """
+
+        self.trigger = Event(env)
+        self.resources = resources
+        self.name = name
+
+    def __str__(self) -> str:
+        return f"MultiRequest object for {self.name}"
 
 
 class GlobalManager:
@@ -55,24 +77,10 @@ class GlobalManager:
         for log in self._logs:
 
             new = deepcopy(log)
-            for key, value in log.items():
-                if key.startswith("request-"):
-                    new[f"delay-{key.replace('request-', '')}"] = (
-                        value - new["Initialized"]
-                    )
-
             if isinstance(self._start, dt.datetime):
                 for k in ["Initialized", "Started", "Finished"]:
                     idx = int(np.ceil(log[k]))
                     new[f"Date {k}"] = self._start + dt.timedelta(hours=idx)
-
-                for k in log.keys():
-
-                    if k.startswith("request-"):
-                        idx = int(np.ceil(log[k]))
-                        new[f"{k}-date"] = self._start + dt.timedelta(
-                            hours=idx
-                        )
 
             processed.append(new)
 
@@ -133,23 +141,21 @@ class GlobalManager:
         log = {"name": name, "Initialized": self.env.now}
 
         resources = self._get_shared_resources(config)
-        requests = [resource.router.request() for _, resource in resources]
+        request = MultiRequest(self.env, dict(resources), name)
 
-        yield self.env.all_of(requests)
+        resource_data = self.library.request(request)
+        yield request.trigger
+
         log["Started"] = self.env.now
-        for key, resource in resources:
-            config[key] = resource.data
+        for key, data in resource_data.items():
+            config[key] = data
 
         project = self._run_project(config)
         yield self.env.timeout(project.project_time)
         log["Finished"] = self.env.now
 
-        self._logs.append(
-            self._append_request_timing(log, resources, requests)
-        )
-
-        for resource, request in zip(resources, requests):
-            resource[1].router.release(request)
+        self._logs.append(log)
+        self.library.release(request)
 
     def _get_start_idx(self, start) -> int:
         """
@@ -181,7 +187,7 @@ class GlobalManager:
             try:
                 if "_shared_pool_" in v:
                     target = v.split(":")[1]
-                    resources.append((k, self.library.resources[k][target]))
+                    resources.append((k, target))
 
             except TypeError:
                 pass
