@@ -140,3 +140,28 @@ def test_simulation_pause():
     first, second = manager.logs
     assert first["Finished"]
     assert second["Finished"]
+
+
+def test_staggered_resources_by_int():
+
+    allocations = {
+        "wtiv": ("test_wtiv", 2),
+        "port": [("test_port_1", 1), ("test_port_2", 1)],
+    }
+
+    config = deepcopy(BASE)
+    config["wtiv"] = "_shared_pool_:test_wtiv"
+    config["port"] = "_shared_pool_:test_port_1"
+
+    configs = [config, config, config]
+    manager = GlobalManager(configs, allocations, library_path=LIBRARY_PATH)
+    manager.add_future_resources("wtiv", "test_wtiv", [1000])
+    manager.add_future_resources("port", "test_port_1", [400, 800])
+    manager.run()
+
+    assert len(manager.logs) == 3
+
+    first, second, third = manager.logs
+    assert first["Started"] == 0
+    assert second["Started"] == 400
+    assert third["Started"] == 1000
