@@ -194,6 +194,56 @@ class GlobalManager:
 
         return resources
 
+    def add_future_resources(self, category, name, dates):
+        """
+        Schedules future resources to be added to respective resource pool.
+
+        Parameters
+        ----------
+        category : str
+            Resource category.
+        name : str
+            Resource name.
+        dates : list | dt.date
+            Date(s) when new resources are added.
+        """
+
+        if not isinstance(dates, list):
+            dates = [dates]
+
+        for date in dates:
+
+            if isinstance(date, dt.datetime):
+                delay = (date - self._start).days * 24
+
+            else:
+                delay = date - self._start
+
+            if delay < 0:
+                raise ValueError(
+                    f"Start date {date} is prior to simulation start."
+                )
+
+            self.env.process(self._add_resource(category, name, delay))
+
+    def _add_resource(self, category, name, delay):
+        """
+        Schedules a new resource to be added to resource pool at time `delay`.
+
+        Parameters
+        ----------
+        category : str
+            Resource category.
+        name : str
+            Resource name.
+        delay : int | float
+            Delay time before resource is added to pool.
+        """
+
+        yield self.env.timeout(delay)
+        self.library.resources[category][name]._capacity += 1
+        self.library.check_requests()
+
     def _run_project(self, config):
         """
         Run configured ORBIT project.
