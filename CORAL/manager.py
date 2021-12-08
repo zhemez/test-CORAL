@@ -55,6 +55,7 @@ class GlobalManager:
         """
 
         self._logs = []
+        self._projects = {}
         self._counter = Counter()
         self._weather = weather
         self._alloc = allocations
@@ -154,6 +155,7 @@ class GlobalManager:
         yield self.env.timeout(project.project_time)
         log["Finished"] = self.env.now
 
+        self._projects[name] = project
         self._logs.append(log)
         self.library.release(request)
 
