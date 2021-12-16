@@ -12,22 +12,22 @@ import pandas as pd
 from ORBIT import load_config
 
 
-class Pipeline:
+class ProjectPipeline:
     """Base class for modeling offshore wind project pipelines."""
 
-    def __init__(self, projects_fp, base_config):
+    def __init__(self, filepath, base_config):
         """
-        Creates an instance of `Pipeline`.
+        Creates an instance of `ProjectPipeline`.
 
         Parameters
         ----------
-        projects_fp : str
+        filepath : str
             Filepath
         base_config : str
             Filepath
         """
 
-        self.projects = pd.read_csv(projects_fp, parse_dates=["start_date"])
+        self.projects = pd.read_csv(filepath, parse_dates=["start_date"])
         self.append_num_turbines()
         self.base = load_config(base_config)
         self.configs = self.build_configs()
@@ -98,9 +98,15 @@ class Pipeline:
 
             # Install Phases
             config["install_phases"]["MonopileInstallation"] = 0
-            config["install_phases"]["ScourProtectionInstallation"] = ('MonopileInstallation', 1.)
-            config["install_phases"]["TurbineInstallation"] = ('MonopileInstallation', 1.)
-            
+            config["install_phases"]["ScourProtectionInstallation"] = (
+                "MonopileInstallation",
+                1.0,
+            )
+            config["install_phases"]["TurbineInstallation"] = (
+                "MonopileInstallation",
+                1.0,
+            )
+
             # Vessels
             config["wtiv"] = "_shared_pool_:example_wtiv"
             config["feeder"] = "_shared_pool_:example_feeder"
@@ -116,3 +122,71 @@ class Pipeline:
             raise TypeError(f"Substructure '{substructure}' not supported.")
 
         return config
+
+
+class InfrastructurePipeline:
+    """"""
+
+    def __init__(self, filepath, base_config):
+        """
+        Creates an instance of `InfrastructurePipeline`.
+
+        Parameters
+        ----------
+        filepath : str
+            Filepath
+        base_config : str
+            Filepath
+        """
+
+        self.phases = pd.read_csv(filepath, parse_dates=["start_date"])
+        self.append_num_turbines()
+        self.base = load_config(base_config)
+        self.configs = self.build_configs()
+
+    def append_num_turbines(self):
+        """
+        Append the number of turbines if missing. Calculated with project and
+        turbine capacity.
+        """
+
+        if "num_turbines" not in self.phases:
+
+            self.phases["_cap"] = self.phases["turbine"].apply(
+                lambda x: float(re.search(r"\d+", x).group(0))
+            )
+            self.phases["num_turbines"] = (
+                self.phases["capacity"] / self.phases["_cap"]
+            )
+            self.phases["num_turbines"] = self.phases["num_turbines"].apply(
+                lambda x: int(np.ceil(x))
+            )
+
+    def build_configs(self):
+        """Iterate through projects in `self.phases` and build ORBIT configs."""
+
+        configs = []
+        for _, data in self.phases.iterrows():
+
+            config = deepcopy(self.base)
+            config["project_name"] = data["name"]
+            config["project_start"] = data["start_date"]
+
+            config["turbine"] = data["turbine"]
+
+            if config.get("plant", None) is None:
+                config["plant"] = {}
+            config["plant"]["capacity"] = data["capacity"]
+            config["plant"]["num_turbines"] = data["num_turbines"]
+
+            if config.get("site", None) is None:
+                config["site"] = {}
+            config["site"]["depth"] = data["depth"]
+            config["site"]["distance"] = data["distance"]
+            config["site"]["distance_to_landfall"] = data["distance_to_shore"]
+
+            config["export_system_design"] = {"cables": data["cable"]}
+
+            configs.append(config)
+
+        return configs

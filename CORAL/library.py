@@ -10,7 +10,12 @@ import yaml
 from simpy import Resource
 from ORBIT.core.library import loader, default_library
 
-CATEGORY_MAP = {"wtiv": "vessels", "feeder": "vessels", "port": "ports"}
+CATEGORY_MAP = {
+    "wtiv": "vessels",
+    "feeder": "vessels",
+    "port": "ports",
+    "export_cable_install_vessel": "vessels",
+}
 
 
 class SharedLibrary:

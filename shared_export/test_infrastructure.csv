@@ -1,0 +1,6 @@
+,name,start_date,turbine,num_turbines,capacity,cable,depth,distance,distance_to_shore
+0,Backbone Phase 1,1/1/21,10MW_generic,200,2000,XLPE_1000mm_220kV,40,50,200
+1,Backbone Phase 2,1/1/22,10MW_generic,200,2000,XLPE_1000mm_220kV,40,50,200
+2,Backbone Phase 3,1/1/25,10MW_generic,200,2000,XLPE_1000mm_220kV,40,50,200
+3,Interconnect 1,1/1/21,10MW_generic,200,2000,XLPE_1000mm_220kV,40,50,150
+4,Interconnect 2,1/1/23,10MW_generic,200,2000,XLPE_1000mm_220kV,40,50,100

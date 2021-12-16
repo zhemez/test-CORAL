@@ -1,0 +1,10 @@
+landfall:
+  interconnection_distance: 3
+  trench_length: 2
+# Vessels
+export_cable_install_vessel: _shared_pool_:example_cable_lay_vessel
+# Configured Phases
+design_phases:
+- ExportSystemDesign
+install_phases:
+  ExportCableInstallation: 0
