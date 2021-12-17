@@ -1,6 +1,6 @@
 """Distribution setup."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.rst", "r") as fh:
     long_description = fh.read()
@@ -9,6 +9,6 @@ with open("README.rst", "r") as fh:
 setup(
     name="CORAL",
     description=long_description,
-    packages=[],
+    packages=find_packages(),
     install_requires=["orbit-nrel==1.0.5", "jupyterlab"],
 )
