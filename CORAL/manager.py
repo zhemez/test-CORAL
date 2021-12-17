@@ -9,6 +9,7 @@ from copy import deepcopy
 from collections import Counter
 
 import numpy as np
+import pandas as pd
 from ORBIT import ProjectManager
 from simpy import Event, Environment
 
@@ -86,6 +87,18 @@ class GlobalManager:
             processed.append(new)
 
         return processed
+
+    def get_results(self, keep_inputs=[]):
+        """"""
+
+        df = pd.DataFrame(self.logs).iloc[::-1]
+        df = df.reset_index(drop=True).reset_index()
+
+        if keep_inputs:
+            # input_map =
+            pass
+
+        return df
 
     def initialize_shared_environment(self):
         """Initializes `simpy.Environment` for managing shared resources."""

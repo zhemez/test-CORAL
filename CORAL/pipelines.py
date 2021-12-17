@@ -15,7 +15,13 @@ from ORBIT import load_config
 class Pipeline:
     """Base class for modeling offshore wind project pipelines."""
 
-    def __init__(self, projects_fp, base_config):
+    def __init__(
+        self,
+        projects_fp,
+        base_config,
+        regional_ports=True,
+        enforce_feeders=False,
+    ):
         """
         Creates an instance of `Pipeline`.
 
@@ -25,11 +31,18 @@ class Pipeline:
             Filepath
         base_config : str
             Filepath
+        regional_ports : bool (optional)
+            Toggle for regional ports or specific ports.
+        enforce_feeders : bool (optional)
+            Toggle for enforcing feeder barges for all fixed bottom projects.
         """
 
         self.projects = pd.read_csv(projects_fp, parse_dates=["start_date"])
         self.append_num_turbines()
         self.base = load_config(base_config)
+        self.regional_ports = regional_ports
+        self.enforce_feeders = enforce_feeders
+
         self.configs = self.build_configs()
 
     def append_num_turbines(self):
@@ -67,7 +80,16 @@ class Pipeline:
             config["site"]["depth"] = data["depth"]
             config["site"]["distance_to_landfall"] = data["distance_to_shore"]
 
-            config["port"] = ":".join(["_shared_pool_", data["port_region"]])
+            if self.regional_ports:
+                config["port"] = ":".join(
+                    ["_shared_pool_", data["port_region"]]
+                )
+                # TODO: Check for NaNs in both cases
+
+            else:
+                config["port"] = ":".join(
+                    ["_shared_pool_", data["associated_port"]]
+                )
 
             config = self.add_substructure_specific_config(
                 config, data["substructure"]
@@ -98,13 +120,22 @@ class Pipeline:
 
             # Install Phases
             config["install_phases"]["MonopileInstallation"] = 0
-            config["install_phases"]["ScourProtectionInstallation"] = ('MonopileInstallation', 1.)
-            config["install_phases"]["TurbineInstallation"] = ('MonopileInstallation', 1.)
-            
+            config["install_phases"]["ScourProtectionInstallation"] = (
+                "MonopileInstallation",
+                1.0,
+            )
+            config["install_phases"]["TurbineInstallation"] = (
+                "MonopileInstallation",
+                1.0,
+            )
+
             # Vessels
             config["wtiv"] = "_shared_pool_:example_wtiv"
-            config["feeder"] = "_shared_pool_:example_feeder"
-            config["num_feeders"] = 2
+
+            port = config["port"].replace("_shared_pool_:", "")
+            if port in ["sbmt", "new_bedford"] or self.enforce_feeders:
+                config["feeder"] = "_shared_pool_:example_feeder"
+                config["num_feeders"] = 2
 
         elif substructure == "jacket":
             raise TypeError(f"Substructure type 'jacket' not supported.")
