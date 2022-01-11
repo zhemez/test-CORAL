@@ -60,6 +60,7 @@ class GlobalManager:
         self._alloc = allocations
         self.configs = [deepcopy(config) for config in configs]
         self._start = self._get_internal_start_date()
+        self._projects = {}
 
         self.initialize_shared_environment()
         self.library = SharedLibrary(self.env, self._alloc, path=library_path)
@@ -154,6 +155,7 @@ class GlobalManager:
         yield self.env.timeout(project.project_time)
         log["Finished"] = self.env.now
 
+        self._projects[name] = project
         self._logs.append(log)
         self.library.release(request)
 
