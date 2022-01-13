@@ -126,7 +126,7 @@ class Pipeline:
             )
             config["install_phases"]["TurbineInstallation"] = (
                 "MonopileInstallation",
-                1.0,
+                1.25,
             )
 
             # Vessels

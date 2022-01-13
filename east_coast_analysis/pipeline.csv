@@ -1,46 +1,41 @@
-﻿name,lat,lon,capacity,turbine,depth,distance_to_site_(km),distance_to_shore,substructure,start_date,port_region,associated_port
-Bay State Wind a,40.96,-70.829972,759,15MW_generic,43,65,33,monopile,5/1/26 0:00,northeast,new_bedford
-Bay State Wind b,40.96,-70.829972,759,15MW_generic,43,65,33,monopile,5/1/30 0:00,northeast,new_bedford
-Bay State Wind c,40.96,-70.829972,759,15MW_generic,43,65,33,monopile,5/1/32 0:00,northeast,new_bedford
-Park City Wind,40.917778,-70.885278,804,15MW_generic,40,120,37,monopile,5/1/23 0:00,northeast,new_bedford
-Vineyard Wind 1a,41.00642,-70.47765,400,12MW_generic,42,100,33,monopile,5/1/21 0:00,northeast,new_bedford
-Vineyard Wind 1b,41.00642,-70.47765,400,12MW_generic,42,100,33,monopile,5/1/22 0:00,northeast,new_bedford
-Beacon Wind 1,40.730556,-70.599444,1230,15MW_generic,40,118,96,monopile,5/1/24 0:00,northeast,sbmt
-Mayflower Wind 1,40.802396,-70.340331,804,15MW_generic,50,135,60,monopile,5/1/23 0:00,northeast,new_bedford
-Mayflower Wind 2,40.802396,-70.340331,747,15MW_generic,50,135,60,monopile,5/1/28 0:00,northeast,new_bedford
-Liberty Wind,40.506944,-70.466667,1600,15MW_generic,40,145,135,monopile,5/1/32 0:00,northeast,new_bedford
-Sunrise Wind,40.979722,-71.279167,880,8MW_generic,40,90,48,monopile,5/1/22 0:00,northeast,new_london
-Revolution Wind (CT),41.270313,-71.144904,304,10MW_generic,40,80,15,monopile,5/1/22 0:00,northeast,new_london
-Revolution Wind (RI),41.270313,-71.144904,400,10MW_generic,40,80,15,monopile,5/1/22 0:00,northeast,new_london
-South Fork,41.078046,-71.543159,130,12MW_generic,40,57,56,monopile,5/1/21 0:00,northeast,new_london
-Empire Wind,40.399963,-73.524447,816,12MW_generic,30,295,32,monopile,5/1/22 0:00,central,sbmt
-Empire Wind 2a,40.03629,-73.199608,630,15MW_generic,30,285,48,monopile,5/1/23 0:00,central,sbmt
-Empire Wind 2b,40.03629,-73.199608,630,15MW_generic,30,285,48,monopile,5/1/24 0:00,central,sbmt
-Atlantic Shores Offshore Wind 1a,39.335264,-73.954407,761.6,15MW_generic,40,150,25,monopile,5/1/25 0:00,central,njwp
-Atlantic Shores Offshore Wind 1b,39.335264,-73.954407,748,15MW_generic,40,150,25,monopile,5/1/26 0:00,central,njwp
-Atlantic Shores Offshore Wind 2a,39.335264,-73.954407,800,15MW_generic,40,150,25,monopile,5/1/29 0:00,central,njwp
-Atlantic Shores Offshore Wind 2b,39.335264,-73.954407,700,15MW_generic,40,150,25,monopile,5/1/30 0:00,central,njwp
-Ocean Wind 1a,39.008225,-74.132881,368,12MW_generic,28,128,25,monopile,5/1/22 0:00,central,new_london
-Ocean Wind 1b,39.008225,-74.132881,368,12MW_generic,28,128,25,monopile,5/1/22 0:00,central,new_london
-Ocean Wind 1c,39.008225,-74.132881,368,12MW_generic,28,128,25,monopile,5/1/22 0:00,central,new_london
-Ocean Wind 2a,39.008225,-74.132881,392,15MW_generic,28,128,25,monopile,5/1/26 0:00,central,new_london
-Ocean Wind 2b,39.008225,-74.132881,378,15MW_generic,28,128,25,monopile,5/1/26 0:00,central,new_london
-Ocean Wind 2c,39.008225,-74.132881,378,15MW_generic,28,128,25,monopile,5/1/27 0:00,central,new_london
-Garden State Offshore Energy a,39.08,-74.3106,525,10MW_generic,40,105,17,monopile,5/1/28 0:00,central,new_london
-Garden State Offshore Energy b,39.08,-74.3106,525,10MW_generic,40,105,17,monopile,5/1/28 0:00,central,new_london
-Skipjack,38.375038,-74.408704,120,12MW_generic,40,115,30,monopile,5/1/24 0:00,central,new_london
-MarWin,38.356944,-74.768333,248,12MW_generic,40,143,27,monopile,5/1/22 0:00,central,njwp
-CVOW Commercial a,36.800169,-75.365973,860,15MW_generic,25,100,43,monopile,5/1/22 0:00,south,portsmouth
-CVOW Commercial b,36.800169,-75.365973,860,15MW_generic,25,100,43,monopile,5/1/23 0:00,south,portsmouth
-CVOW Commercial c,36.800169,-75.365973,860,15MW_generic,25,100,43,monopile,5/1/24 0:00,south,portsmouth
-Kitty Hawk a,36.069184,-75.106375,800,15MW_generic,40,150,43,monopile,5/1/24 0:00,south,portsmouth
-Kitty Hawk b,36.069184,-75.106375,800,15MW_generic,40,150,43,monopile,5/1/26 0:00,south,portsmouth
-Kitty Hawk c,36.069184,-75.106375,800,15MW_generic,40,150,43,monopile,5/1/28 0:00,south,portsmouth
-Vineyard Wind South a,,,892,15MW_generic,40,120,50,monopile,5/1/27 0:00,northeast,new_bedford
-Vineyard Wind South b,,,608,15MW_generic,40,120,50,monopile,5/1/24 0:00,northeast,new_bedford
-Hudson North WEA a,39.971,-72.752,536,15MW_generic,43,315,50,monopile,5/1/25 0:00,central,sbmt
-Hudson North WEA b,40.241582,-73.071,523,15MW_generic,43,315,50,monopile,5/1/26 0:00,central,sbmt
-Hudson South WEA a,39.726,-73.156,1024,15MW_generic,46,280,50,monopile,5/1/28 0:00,central,sbmt
-Momentum Wind a,38.356944,-74.768333,411,12MW_generic,40,143,50,monopile,5/1/24 0:00,central,sbmt
-Momentum Wind b,38.356944,-74.768333,794,12MW_generic,40,143,50,monopile,5/1/26 0:00,central,sbmt
-TBD SC Lease,33.2812854,-78.8561473,400,15MW_generic,30,668,50,monopile,5/1/28 0:00,south,sbmt
+﻿name,lat,lon,capacity,turbine,depth,distance_to_site_(km),distance_to_shore,substructure,start_date,associated_port,port_region
+Bay State Wind a,40.96,-70.829972,759,15MW_generic,43,65,33,monopile,5/1/26 0:00,new_bedford,northeast
+Bay State Wind b,40.96,-70.829972,759,15MW_generic,43,65,33,monopile,5/1/30 0:00,new_bedford,northeast
+Bay State Wind c,40.96,-70.829972,759,15MW_generic,43,65,33,monopile,5/1/32 0:00,new_bedford,northeast
+Park City Wind,40.917778,-70.885278,804,15MW_generic,40,120,37,monopile,5/1/25 0:00,new_bedford,northeast
+Vineyard Wind 1,41.00642,-70.47765,800,12MW_generic,42,100,33,monopile,5/1/23 0:00,new_bedford,northeast
+Beacon Wind 1,40.730556,-70.599444,1230,15MW_generic,40,118,96,monopile,5/1/28 0:00,new_bedford,northeast
+Mayflower Wind 1,40.802396,-70.340331,804,15MW_generic,50,135,60,monopile,5/1/25 0:00,new_bedford,northeast
+Mayflower Wind 2,40.802396,-70.340331,747,15MW_generic,50,135,60,monopile,5/1/30 0:00,new_bedford,northeast
+Liberty Wind,40.506944,-70.466667,1607,15MW_generic,40,145,135,monopile,5/1/27 0:00,new_bedford,northeast
+Sunrise Wind,40.979722,-71.279167,880,10MW_generic,40,90,48,monopile,5/1/24 0:00,new_london,northeast
+Revolution Wind (CT),41.270313,-71.144904,304,10MW_generic,40,80,15,monopile,5/1/25 0:00,new_london,northeast
+Revolution Wind (RI),41.270313,-71.144904,400,10MW_generic,40,80,15,monopile,5/1/25 0:00,new_london,northeast
+South Fork,41.078046,-71.543159,132,12MW_generic,40,57,56,monopile,5/1/23 0:00,new_london,northeast
+Empire Wind,40.399963,-73.524447,816,12MW_generic,30,295,32,monopile,5/1/24 0:00,sbmt,central
+Empire Wind 2,40.03629,-73.199608,1260,15MW_generic,30,285,48,monopile,5/1/25 0:00,sbmt,central
+Atlantic Shores Offshore Wind 1,39.335264,-73.954407,1509.6,15MW_generic,40,150,25,monopile,5/1/27 0:00,njwp,central
+Atlantic Shores Offshore Wind 2,39.335264,-73.954407,1500,15MW_generic,40,150,25,monopile,5/1/30 0:00,njwp,central
+Ocean Wind 1,39.008225,-74.132881,1104,12MW_generic,28,128,25,monopile,5/1/24 0:00,new_london,central
+Ocean Wind 2,39.008225,-74.132881,1148,15MW_generic,28,128,25,monopile,5/1/28 0:00,njwp,central
+Garden State Offshore Energy,39.08,-74.3106,1050,10MW_generic,40,105,17,monopile,5/1/30 0:00,new_london,central
+Skipjack,38.375038,-74.408704,120,12MW_generic,40,115,30,monopile,5/1/26 0:00,new_london,central
+MarWin,38.356944,-74.768333,248,12MW_generic,40,143,27,monopile,5/1/24 0:00,njwp,central
+CVOW Commercial a,36.800169,-75.365973,860,15MW_generic,25,100,43,monopile,5/1/24 0:00,portsmouth,south
+CVOW Commercial b,36.800169,-75.365973,860,15MW_generic,25,100,43,monopile,5/1/25 0:00,portsmouth,south
+CVOW Commercial c,36.800169,-75.365973,860,15MW_generic,25,100,43,monopile,5/1/26 0:00,portsmouth,south
+Kitty Hawk a,36.069184,-75.106375,800,15MW_generic,40,150,43,monopile,5/1/26 0:00,portsmouth,south
+Kitty Hawk b,36.069184,-75.106375,800,15MW_generic,40,150,43,monopile,5/1/28 0:00,portsmouth,south
+Kitty Hawk c,36.069184,-75.106375,800,15MW_generic,40,150,43,monopile,5/1/30 0:00,portsmouth,south
+Vineyard Wind South,0,0,1500,15MW_generic,40,120,50,monopile,5/1/26 0:00,new_bedford,northeast
+Hudson North WEA a,39.971,-72.752,536,15MW_generic,43,315,50,monopile,5/1/27 0:00,sbmt,central
+Hudson North WEA b,40.241582,-73.071,523,15MW_generic,43,315,50,monopile,5/1/28 0:00,sbmt,central
+Hudson South WEA a,39.726,-73.156,1024,15MW_generic,46,280,50,monopile,5/1/29 0:00,sbmt,central
+Momentum Wind a,38.356944,-74.768333,411,12MW_generic,40,143,50,monopile,5/1/26 0:00,njwp,central
+Momentum Wind b,38.356944,-74.768333,794,12MW_generic,40,143,50,monopile,5/1/28 0:00,njwp,central
+TBD SC Lease,33.2812854,-78.8561473,400,15MW_generic,30,668,50,monopile,5/1/28 0:00,portsmouth,south
+Hudson South WEA f,39.726,-73.156,1041,15MW_generic,46,280,50,monopile,5/1/34 0:00,sbmt,central
+Hudson South WEA b,39.726,-73.156,972,15MW_generic,46,280,50,monopile,5/1/30 0:00,sbmt,central
+Hudson South WEA c,39.726,-73.156,924,15MW_generic,46,280,50,monopile,5/1/35 0:00,sbmt,central
+Hudson South WEA d,39.726,-73.156,1028,15MW_generic,46,280,50,monopile,5/1/32 0:00,sbmt,central
+Hudson South WEA e,39.726,-73.156,1067,15MW_generic,46,280,50,monopile,5/1/33 0:00,sbmt,central
