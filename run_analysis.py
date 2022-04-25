@@ -39,6 +39,7 @@ if __name__ == '__main__':
     manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
 
     # ASsumptions
+    # Test
     # New Bedford, PMT ready now.  Might be able to marshall 2 out of PMT
     # NJWP ready in 2023 and expanded in 2025
     # State Pier ready in 2023
@@ -54,9 +55,9 @@ if __name__ == '__main__':
     # Just adding a port doens't do much.  Also need WTIVs.
 
     future_resources = [
-        ['wtiv', 'example_wtiv', [dt.datetime(2023, 5, 1)]],
+        # ['wtiv', 'example_wtiv', [dt.datetime(2023, 5, 1)]],
         ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-        ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+        # ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
         # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
         # ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
         # ['port', 'new_bedford', [dt.datetime(2025, 1, 1)]],  # (=SAlem)
