@@ -19,6 +19,8 @@ def run():
     base = os.path.join(DIR, "base.yaml")
     pipeline = Pipeline(projects, base)
 
+    print(pipeline)
+
     # CORAL Configuration
     library_path = os.path.join(DIR, "library")
     allocations = {

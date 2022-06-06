@@ -52,7 +52,6 @@ class Pipeline:
         """
 
         if "num_turbines" not in self.projects:
-
             self.projects["_cap"] = self.projects["turbine"].apply(
                 lambda x: float(re.search(r"\d+", x).group(0))
             )
