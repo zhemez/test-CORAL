@@ -49,7 +49,8 @@ if __name__ == '__main__':
     #######
     # 1 vessel (Charybdis) ready at beginning
     # MAersk ready in 2025
-    # Additional WTIVs online in 2026 (Keppel) and 2x 2028 (Philly, VT Halter)
+    # Additional WTIVs online in 2026 (Keppel) and 2x 2028 (Philly, VT Halter) and 1x 2029
+
 
     # Notes:
     # Just adding a port doens't do much.  Also need WTIVs.
@@ -60,6 +61,7 @@ if __name__ == '__main__':
         ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
         ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
         ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+        ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
         ['port', 'new_bedford', [dt.datetime(2027, 1, 1)]],  # (=SAlem)
         # ['port', 'njwp', [dt.datetime(2023, 5, 1)]],
         # ['port', 'new_london', [dt.datetime(2023, 5, 1)]],
@@ -77,6 +79,9 @@ if __name__ == '__main__':
     # Postprocessing
     df = pd.DataFrame(manager.logs).iloc[::-1]
     df = df.reset_index(drop=True).reset_index()
+
+    # Save csv
+    df.to_csv('east_coast_analysis/figures/sc_roadmap_gaps/east_coast_simulation.csv')
 
     # Assign ports to projects
     port_map = pipeline.projects[["name", "associated_port", "capacity"]].set_index("name").to_dict()['associated_port']
