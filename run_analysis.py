@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -10,6 +11,8 @@ mpl.rcParams['hatch.linewidth'] = 0.2  # previous pdf hatch linewidth
 from ORBIT.core.library import initialize_library
 from CORAL import SharedLibrary, GlobalManager, Pipeline
 from CORAL.utils import get_installed_capacity_by
+
+
 
 if __name__ == '__main__':
     initialize_library(os.path.join(os.getcwd(), "east_coast_analysis/library"))
@@ -33,8 +36,14 @@ if __name__ == '__main__':
             ('njwp', 1),
             ('sbmt', 1),
             ('portsmouth', 1),
+            ('salem', 1),
+            ('tradepoint', 1),
+            ('akt', 1)
         ],
     }
+
+    num_wtiv = len(allocations['wtiv'])
+    num_port = len(allocations['port'])
 
     manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
 
@@ -62,12 +71,21 @@ if __name__ == '__main__':
         ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
         ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
         ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
-        ['port', 'new_bedford', [dt.datetime(2027, 1, 1)]],  # (=SAlem)
+        # ['port', 'new_bedford', [dt.datetime(2027, 1, 1)]],  # (=SAlem)
         # ['port', 'njwp', [dt.datetime(2023, 5, 1)]],
         # ['port', 'new_london', [dt.datetime(2023, 5, 1)]],
-        ['port', 'sbmt', [dt.datetime(2027, 1, 1)]],
+        # ['port', 'sbmt', [dt.datetime(2027, 1, 1)]],
         ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
     ]
+
+    new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
+    new_ports = [1 for fr in future_resources if 'port' in fr]
+
+    total_wtiv = np.sum([num_wtiv]+new_wtiv)
+    total_ports = np.sum([num_port]+new_ports)
+
+    fig_name = str(total_wtiv)+'wtiv_'+str(total_ports)+'ports'
+
 
     for f in future_resources:
         manager.add_future_resources(f[0], f[1], f[2])
@@ -112,7 +130,8 @@ if __name__ == '__main__':
 
     fig.subplots_adjust(left=0.25)
 
-    fig.savefig("east_coast_analysis/figures/sc_roadmap_gaps/existing.png", dpi=300)
+    fname_d = 'east_coast_analysis/figures/sc_roadmap_gaps/deployment_'+fig_name+'.png'
+    fig.savefig(fname_d, dpi=300)
 
     ### Annual throughput
 
@@ -152,5 +171,7 @@ if __name__ == '__main__':
     plt.yticks(fontsize=6)
 
     ax.legend(fontsize=6, ncol=5)
+    fname_t = 'east_coast_analysis/figures/sc_roadmap_gaps/throughput_'+fig_name+'.png'
+    fig.savefig(fname_t, dpi=300)
 
     # plt.show()
