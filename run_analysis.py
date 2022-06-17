@@ -21,7 +21,9 @@ scenario_names = [
     '_delayedPort',
     # 1 year construction delays on SBMT, AKT, Salem, New London
     '_delayedPort_limitWTIV',
-    '_limitFeeder'
+    '_expandPort',
+    '_limitFeeder',
+    '_earlyWTIV'
 ]
 
 pipeline_list = [
@@ -32,8 +34,11 @@ pipeline_list = [
     "east_coast_analysis/pipeline_OWMR2022_delays.csv",
     "east_coast_analysis/pipeline_OWMR2022_delays.csv",
     "east_coast_analysis/pipeline_OWMR2022_akt.csv",
+    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
+    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
 ]
 #### Define initial port and vessel configuration  (all the same for now)
+standard_pipeline = 7   # number of scenarios with same initial allocation list
 allocations_list = [
     {"wtiv": ('example_wtiv', 1),
     "feeder": ('example_feeder', 10),
@@ -48,7 +53,7 @@ allocations_list = [
         ('akt', 1)
     ],
 },
-] * len(pipeline_list) + [
+] * standard_pipeline + [
     {"wtiv": ('example_wtiv', 1),
     "feeder": ('example_feeder', 2),
     "port": [
@@ -62,7 +67,22 @@ allocations_list = [
         ('akt', 1)
     ],
 },
-]
+] + [
+    {"wtiv": ('example_wtiv', 2),
+    "feeder": ('example_feeder', 10),
+    "port": [
+        ('new_bedford', 1),
+        ('new_london', 1),
+        ('njwp', 1),
+        ('sbmt', 1),
+        ('portsmouth', 1),
+        ('salem', 1),
+        ('tradepoint', 1),
+        ('akt', 1)
+    ],
+    },
+    ]
+
 
 future_resources_list = [
 [
@@ -110,14 +130,32 @@ future_resources_list = [
     ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
     ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
     ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2024, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2025, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2026, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2027, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2028, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2029, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2030, 1, 1)],]
+    ['port', 'sbmt', [dt.datetime(2027, 1, 1)]],
+    ['port', 'new_bedford', [dt.datetime(2027, 1, 1)]],
+],  # _expandPort
+[
+    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
+    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
+    # ['feeder', 'example_feeder', [dt.datetime(2024, 1, 1)]],
+    # ['feeder', 'example_feeder', [dt.datetime(2025, 1, 1)]],
+    # ['feeder', 'example_feeder', [dt.datetime(2026, 1, 1)]],
+    # ['feeder', 'example_feeder', [dt.datetime(2027, 1, 1)]],
+    # ['feeder', 'example_feeder', [dt.datetime(2028, 1, 1)]],
+    # ['feeder', 'example_feeder', [dt.datetime(2029, 1, 1)]],
+    # ['feeder', 'example_feeder', [dt.datetime(2030, 1, 1)],]
 ],  # _limitFeeder
+[
+    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+    # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+    # ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
+    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
+],  # _earlyWTIV
+
 ]
 
 if __name__ == '__main__':
@@ -159,7 +197,7 @@ if __name__ == '__main__':
         df = df.reset_index(drop=True).reset_index()
 
         # Save csv
-        csv_name = fig_name + '_data.csv'
+        csv_name = 'east_coast_analysis/figures/sc_roadmap_gaps/' + fig_name + '_data.csv'
         df.to_csv(csv_name)
 
         # Assign ports to projects
