@@ -140,13 +140,13 @@ future_resources_list = [
     ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
     ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
     ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2024, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2025, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2026, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2027, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2028, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2029, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2030, 1, 1)],]
+    ['feeder', 'example_feeder', [dt.datetime(2024, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2025, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2026, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2027, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2028, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2029, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2030, 1, 1)],]
 ],  # _limitFeeder
 [
     ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
