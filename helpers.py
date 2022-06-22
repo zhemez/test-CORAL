@@ -1,5 +1,5 @@
 import datetime as dt
-
+import numpy as np
 # Define input files and configurations
 
 input_pipelines = {
@@ -47,7 +47,7 @@ future_allocations = {
 'base': [
     ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
     ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
+    # ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
     ],
 'high_wtiv':[
     ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
@@ -69,4 +69,15 @@ future_allocations = {
     ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
     ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
     ],
+}
+
+current_investment = 150 + 157 + 200 + 400 + 500 #New Bedford, New London, SBMT, NJWP, Charybdis
+wtiv = 500
+port = 400
+investments = {
+'year': [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2028, 2030],
+'base_wtiv': [wtiv, 0, 0, wtiv, 0, 0, 0, 0, 0],
+'high_wtiv': [wtiv, wtiv, 0, wtiv+wtiv, wtiv, 0, 0, 0, 0],
+'add_port': [0, 0, port, port, port, 0, 0, 0, 0],  #Salem, NJWP2, AKT
+'add_ports_fast': [port+port, 0, port, 0, 0, 0, 0, 0, 0],  #Salem, NJWP2, AKT
 }

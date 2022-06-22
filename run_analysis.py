@@ -4,6 +4,7 @@ import numpy as np
 import datetime as dt
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from matplotlib.patches import Patch
 from copy import deepcopy
 
 mpl.rcParams['hatch.linewidth'] = 0.2  # previous pdf hatch linewidth
@@ -15,49 +16,65 @@ from CORAL.utils import get_installed_capacity_by
 from helpers import input_pipelines as ip
 from helpers import initial_allocations as ia
 from helpers import future_allocations as fa
+from helpers import investments as inv
 
 scenarios = {
     'baseline': {'pipeline': ip['base'],
                  'initial': ia['base'],
-                 'future': fa['base']},
+                 'future': fa['base'],
+                 'invest': [inv['base_wtiv']]},
     'add_wtiv': {'pipeline': ip['base'],
                  'initial': ia['base'],
-                 'future': fa['high_wtiv']},
-    'add_ports': {'pipeline': ip['add_ports'],
-                 'initial': ia['base'],
-                 'future': fa['add_ports']},
-     'add_ports_fast': {'pipeline': ip['add_ports_fast'],
-                  'initial': ia['base'],
-                  'future': fa['add_ports']},
-     'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
-                  'initial': ia['base'],
-                  'future': fa['add_wtiv_ports']},
-     'add_wtiv_early_ports_fast': {'pipeline': ip['add_ports_fast'],
-                  'initial': ia['add_wtiv'],
-                  'future': fa['add_wtiv_ports']},
+                 'future': fa['high_wtiv'],
+                 'invest': [inv['high_wtiv']],},
+    # 'add_ports': {'pipeline': ip['add_ports'],
+    #              'initial': ia['base'],
+    #              'future': fa['add_ports'],
+    #              'invest': [inv['base_wtiv'], inv['add_port']],},
+    #  'add_ports_fast': {'pipeline': ip['add_ports_fast'],
+    #               'initial': ia['base'],
+    #               'future': fa['add_ports'],
+    #               'invest': [inv['base_wtiv'], inv['add_ports_fast']],},
+    #  'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
+    #               'initial': ia['base'],
+    #               'future': fa['add_wtiv_ports'],
+    #               'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
+    #  'add_wtiv_early_ports_fast': {'pipeline': ip['add_ports_fast'],
+    #               'initial': ia['add_wtiv'],
+    #               'future': fa['add_wtiv_ports'],
+    #               'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
 }
+invest_year_base = [dt.datetime(yi, 1, 1) for yi in inv['year']]
+cumsum_plot = True
 
 if __name__ == '__main__':
+    # Intialize scripts
+
     initialize_library(os.path.join(os.getcwd(), "east_coast_analysis/library"))
 
     weather = pd.read_csv("east_coast_analysis/library/weather/vineyard_wind_repr_with_whales.csv", parse_dates=["datetime"]).set_index("datetime")
 
     library_path = os.path.join(os.getcwd(), "east_coast_analysis/library")
 
+    names = []
+    capacity_2030 = []
+    investment_2030 = []
+
     for name, scenario in scenarios.items():
         # Extract scenario parameters
         pipeline = scenario['pipeline']
         allocations = scenario['initial']
         future_resources = scenario['future']
+        investment = scenario['invest']
 
         projects = os.path.join(os.getcwd(), pipeline)
         base = os.path.join(os.getcwd(), "east_coast_analysis/base.yaml")
         pipeline = Pipeline(projects, base, regional_ports=False)
 
-        num_wtiv = len(allocations['wtiv'])
+        num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
@@ -108,7 +125,26 @@ if __name__ == '__main__':
 
         ax.axvline(dt.date(2031, 1, 1), lw=0.5, ls="--", color="k", zorder=6)
         installed_capacity = get_installed_capacity_by(df, 2031)
-        ax.text(x=dt.date(2031, 4, 1), y=20, s=f"Capacity installed \nby end of 2030: \n{installed_capacity/1000:,.3} GW", fontsize=20)
+        ax.text(x=dt.date(2031, 4, 1), y=24, s=f"Capacity installed \nby end of 2030: \n{installed_capacity/1000:,.3} GW", fontsize=20)
+
+        # Add cumulative investments
+        if cumsum_plot == True:
+            invest_year = deepcopy(invest_year_base)
+            annual_invest = [0] * len(invest_year_base)
+            for i in investment:
+                annual_invest = [x+y for x,y in zip(annual_invest, i)]
+            if df['Date Finished'].max() > invest_year_base[-1]:
+                invest_year.append(df['Date Finished'].max())
+                annual_invest.append(annual_invest[-1])
+            # else:
+            #     invest_year = invest_year_base
+
+            axR = ax.twinx()
+            axR.plot(invest_year, np.cumsum(annual_invest), 'r', zorder=7)
+            axR.set_ylabel('Additional investment required, $M')
+            axR.set_ylim([0,6000])
+            axR.tick_params(axis='y', colors='red')
+            axR.yaxis.label.set_color('red')
 
         fig.subplots_adjust(left=0.25)
 
@@ -157,3 +193,33 @@ if __name__ == '__main__':
         fig.savefig(fname_t, dpi=300)
 
         # plt.show()
+        # Save summary statistics
+        names.append(name)
+        capacity_2030.append(installed_capacity/1000)
+        investment_2030.append(np.cumsum([annual_invest])[-1])
+
+    # Plot
+    fig = plt.figure(figsize=(6, 4), dpi=200)
+    ax1 = fig.add_subplot(111)
+    ax2 = ax1.twinx()
+    width = 0.4
+
+    x_ind = np.arange(len(names))
+    ax1.bar(x_ind-width/2, capacity_2030, width, color='#3C2AC0')
+    ax1.set_ylabel('Installed capacity by end of 2030, GW')
+    ax1.set_ylim([0,35])
+
+    ax2.bar(x_ind+width/2, investment_2030, width, color='#FFA319')
+    ax2.set_ylabel('Additional investment required, $M')
+    ax1.set_xticks(x_ind)
+    ax1.set_xticklabels(names)
+
+    handles = [
+        Patch(facecolor=color, label=label)
+        for label, color in zip(['Installed capacity', 'Investment'], ['#3C2AC0', '#FFA319'])
+    ]
+
+    ax1.legend(handles=handles, loc='upper left');
+
+    fname_sum = 'east_coast_analysis/figures/sc_roadmap_gaps/scenario_summary.png'
+    fig.savefig(fname_sum, bbox_inches='tight', dpi=300)
