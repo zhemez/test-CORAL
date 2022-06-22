@@ -12,151 +12,30 @@ from ORBIT.core.library import initialize_library
 from CORAL import SharedLibrary, GlobalManager, Pipeline
 from CORAL.utils import get_installed_capacity_by
 
-# name scenarios
-scenario_names = [
-    '_unlimited_akt',
-    '_unlimited_no_akt',
-    '_limitWTIV',
-    '_limitWTIV',
-    '_delayedPort',
-    # 1 year construction delays on SBMT, AKT, Salem, New London
-    '_delayedPort_limitWTIV',
-    '_expandPort',
-    '_limitFeeder',
-    '_earlyWTIV'
-]
+from helpers import input_pipelines as ip
+from helpers import initial_allocations as ia
+from helpers import future_allocations as fa
 
-pipeline_list = [
-    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
-    "east_coast_analysis/pipeline_OWMR2022.csv",
-    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
-    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
-    "east_coast_analysis/pipeline_OWMR2022_delays.csv",
-    "east_coast_analysis/pipeline_OWMR2022_delays.csv",
-    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
-    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
-    "east_coast_analysis/pipeline_OWMR2022_akt.csv",
-]
-#### Define initial port and vessel configuration  (all the same for now)
-standard_pipeline = 7   # number of scenarios with same initial allocation list
-allocations_list = [
-    {"wtiv": ('example_wtiv', 1),
-    "feeder": ('example_feeder', 10),
-    "port": [
-        ('new_bedford', 1),
-        ('new_london', 1),
-        ('njwp', 1),
-        ('sbmt', 1),
-        ('portsmouth', 1),
-        ('salem', 1),
-        ('tradepoint', 1),
-        ('akt', 1)
-    ],
-},
-] * standard_pipeline + [
-    {"wtiv": ('example_wtiv', 1),
-    "feeder": ('example_feeder', 2),
-    "port": [
-        ('new_bedford', 1),
-        ('new_london', 1),
-        ('njwp', 1),
-        ('sbmt', 1),
-        ('portsmouth', 1),
-        ('salem', 1),
-        ('tradepoint', 1),
-        ('akt', 1)
-    ],
-},
-] + [
-    {"wtiv": ('example_wtiv', 2),
-    "feeder": ('example_feeder', 10),
-    "port": [
-        ('new_bedford', 1),
-        ('new_london', 1),
-        ('njwp', 1),
-        ('sbmt', 1),
-        ('portsmouth', 1),
-        ('salem', 1),
-        ('tradepoint', 1),
-        ('akt', 1)
-    ],
-    },
-    ]
-
-
-future_resources_list = [
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-],  # _unlimited_akt
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-],  # _unlimited_no_akt
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-],  # _limitWTIV
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-],  # _limitWTIV
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-],  # _delayedPort
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-],  # _delayedPort_limitWTIV
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-    ['port', 'sbmt', [dt.datetime(2027, 1, 1)]],
-    ['port', 'new_bedford', [dt.datetime(2027, 1, 1)]],
-],  # _expandPort
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2024, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2025, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2026, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2027, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2028, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2029, 1, 1)]],
-    ['feeder', 'example_feeder', [dt.datetime(2030, 1, 1)],]
-],  # _limitFeeder
-[
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    # ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2025, 1, 1)]],
-],  # _earlyWTIV
-
-]
+scenarios = {
+    'baseline': {'pipeline': ip['base'],
+                 'initial': ia['base'],
+                 'future': fa['base']},
+    'add_wtiv': {'pipeline': ip['base'],
+                 'initial': ia['base'],
+                 'future': fa['high_wtiv']},
+    'add_ports': {'pipeline': ip['add_ports'],
+                 'initial': ia['base'],
+                 'future': fa['add_ports']},
+     'add_ports_fast': {'pipeline': ip['add_ports_fast'],
+                  'initial': ia['base'],
+                  'future': fa['add_ports']},
+     'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
+                  'initial': ia['base'],
+                  'future': fa['add_wtiv_ports']},
+     'add_wtiv_early_ports_fast': {'pipeline': ip['add_ports_fast'],
+                  'initial': ia['add_wtiv'],
+                  'future': fa['add_wtiv_ports']},
+}
 
 if __name__ == '__main__':
     initialize_library(os.path.join(os.getcwd(), "east_coast_analysis/library"))
@@ -165,7 +44,11 @@ if __name__ == '__main__':
 
     library_path = os.path.join(os.getcwd(), "east_coast_analysis/library")
 
-    for allocations, future_resources, pipeline, name in zip(allocations_list, future_resources_list, pipeline_list, scenario_names):
+    for name, scenario in scenarios.items():
+        # Extract scenario parameters
+        pipeline = scenario['pipeline']
+        allocations = scenario['initial']
+        future_resources = scenario['future']
 
         projects = os.path.join(os.getcwd(), pipeline)
         base = os.path.join(os.getcwd(), "east_coast_analysis/base.yaml")
