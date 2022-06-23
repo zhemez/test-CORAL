@@ -83,7 +83,7 @@ if __name__ == '__main__':
         num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
@@ -171,11 +171,18 @@ if __name__ == '__main__':
 
             else:
 
-                perc = (project["Date Finished"].date() - dt.date(project["Date Finished"].year, 1, 1)) /\
-                    (project["Date Finished"] - project["Date Started"])
+                total = project["Date Finished"].date() - project["Date Started"].date()
+                for year in np.arange(project["Date Started"].year, project["Date Finished"].year + 1):
+                    if year == project["Date Started"].year:
+                        perc = (dt.date(year + 1, 1, 1) - project["Date Started"].date()) / total
 
-                res.append((project["Date Finished"].year, project["port"], perc * project["capacity"]))
-                res.append((project["Date Started"].year, project["port"], (1 - perc) * project["capacity"]))
+                    elif year == project["Date Finished"].year:
+                        perc = (project["Date Finished"].date() - dt.date(year, 1, 1)) / total
+
+                    else:
+                        perc = (dt.date(year + 1, 1, 1) - dt.date(year, 1, 1)) / total
+
+                    res.append((year, project["port"], perc * project["capacity"]))
 
         throughput = pd.DataFrame(res, columns=["year", "port", "capacity"]).pivot_table(
             index=["year"],
