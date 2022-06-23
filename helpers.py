@@ -6,6 +6,7 @@ input_pipelines = {
 'base': "east_coast_analysis/pipelines/pipeline_OWMR2022_base.csv",
 'add_ports': "east_coast_analysis/pipelines/pipeline_OWMR2022_add_ports.csv",
 'add_ports_fast': "east_coast_analysis/pipelines/pipeline_OWMR2022_add_ports_fast.csv",
+'reduce_ports': "east_coast_analysis/pipelines/pipeline_OWMR2022_reduce_ports.csv",
 # 'no_akt': "east_coast_analysis/pipelines/pipeline_OWMR2022.csv",
 # 'delays': "east_coast_analysis/pipelines/pipeline_OWMR2022_delays.csv",
 # 'fast': "east_coast_analysis/pipelines/pipeline_OWMR2022_akt_fast.csv",
@@ -80,4 +81,15 @@ investments = {
 'high_wtiv': [wtiv, wtiv, 0, wtiv+wtiv, wtiv, 0, 0, 0, 0],
 'add_port': [0, 0, port, port, port, 0, 0, 0, 0],  #Salem, NJWP2, AKT
 'add_ports_fast': [port+port, 0, port, 0, 0, 0, 0, 0, 0],  #Salem, NJWP2, AKT
+}
+
+plot_names_map = {
+'baseline': 'Existing \ninfrastructure',
+'add_wtiv': 'Add WTIVs',
+'add_ports': 'Add ports',
+'add_wtiv_ports': 'Add WTIVS \nand ports',
+'add_wtiv_eur_ports': 'Add US and Eur WTIVs \n and ports',
+'reduce_ports': 'Reduced ports',
+'add_ports_fast': 'Add ports \n(early constr.)',
+'add_wtiv_ports_fast ': 'Add WTIVS \nand ports (early constr.)',
 }

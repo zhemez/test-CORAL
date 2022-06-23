@@ -35,8 +35,6 @@ design_phases:
 - ExportSystemDesign
 - OffshoreSubstationDesign
 install_phases:
-  ArrayCableInstallation: !!python/tuple
-  - MonopileInstallation
-  - 1.0
+  ArrayCableInstallation: 0
   ExportCableInstallation: 0   # Indexed by OSS Install
   OffshoreSubstationInstallation: 0

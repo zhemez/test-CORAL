@@ -123,6 +123,7 @@ class Pipeline:
                 "MonopileInstallation",
                 1.0,
             )
+            # config["install_phases"]["TurbineInstallation"] = 0
             config["install_phases"]["TurbineInstallation"] = (
                 "MonopileInstallation",
                 1.25,

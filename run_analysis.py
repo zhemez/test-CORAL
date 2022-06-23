@@ -17,6 +17,7 @@ from helpers import input_pipelines as ip
 from helpers import initial_allocations as ia
 from helpers import future_allocations as fa
 from helpers import investments as inv
+from helpers import plot_names_map as pnm
 
 scenarios = {
     'baseline': {'pipeline': ip['base'],
@@ -27,22 +28,30 @@ scenarios = {
                  'initial': ia['base'],
                  'future': fa['high_wtiv'],
                  'invest': [inv['high_wtiv']],},
-    # 'add_ports': {'pipeline': ip['add_ports'],
-    #              'initial': ia['base'],
-    #              'future': fa['add_ports'],
-    #              'invest': [inv['base_wtiv'], inv['add_port']],},
-    #  'add_ports_fast': {'pipeline': ip['add_ports_fast'],
-    #               'initial': ia['base'],
-    #               'future': fa['add_ports'],
-    #               'invest': [inv['base_wtiv'], inv['add_ports_fast']],},
-    #  'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
-    #               'initial': ia['base'],
-    #               'future': fa['add_wtiv_ports'],
-    #               'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
-    #  'add_wtiv_early_ports_fast': {'pipeline': ip['add_ports_fast'],
-    #               'initial': ia['add_wtiv'],
-    #               'future': fa['add_wtiv_ports'],
-    #               'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
+    'add_ports': {'pipeline': ip['add_ports'],
+                 'initial': ia['base'],
+                 'future': fa['add_ports'],
+                 'invest': [inv['base_wtiv'], inv['add_port']],},
+     # 'reduce_ports': {'pipeline': ip['reduce_ports'],
+     #              'initial': ia['base'],
+     #              'future': fa['high_wtiv'],
+     #              'invest': [inv['high_wtiv']],},
+     # 'add_ports_fast': {'pipeline': ip['add_ports_fast'],
+     #              'initial': ia['base'],
+     #              'future': fa['add_ports'],
+     #              'invest': [inv['base_wtiv'], inv['add_ports_fast']],},
+     'add_wtiv_ports': {'pipeline': ip['add_ports'],
+               'initial': ia['base'],
+               'future': fa['add_wtiv_ports'],
+               'invest': [inv['high_wtiv'], inv['add_port']],},
+     # 'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
+     #              'initial': ia['base'],
+     #              'future': fa['add_wtiv_ports'],
+     #              'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
+     'add_wtiv_eur_ports': {'pipeline': ip['add_ports'],
+                  'initial': ia['add_wtiv'],
+                  'future': fa['add_wtiv_ports'],
+                  'invest': [inv['high_wtiv'], inv['add_port']],},
 }
 invest_year_base = [dt.datetime(yi, 1, 1) for yi in inv['year']]
 cumsum_plot = True
@@ -74,7 +83,7 @@ if __name__ == '__main__':
         num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
@@ -212,7 +221,8 @@ if __name__ == '__main__':
     ax2.bar(x_ind+width/2, investment_2030, width, color='#FFA319')
     ax2.set_ylabel('Additional investment required, $M')
     ax1.set_xticks(x_ind)
-    ax1.set_xticklabels(names)
+    plot_names = [pnm[n] for n in names]
+    ax1.set_xticklabels(plot_names, rotation=90)
 
     handles = [
         Patch(facecolor=color, label=label)
