@@ -33,6 +33,7 @@ class SharedLibrary:
         self._resources = {}
         self._requests = []
         self._processed = []
+        self._history = []
 
         self.initialize_library_path(path)
         self.initialize_shared_resources()
@@ -132,6 +133,19 @@ class SharedLibrary:
 
                 except RuntimeError:
                     pass
+
+        self._history.append(self.resource_capacities)
+
+    @property
+    def resource_capacities(self):
+
+        out = {"time": self.env.now}
+
+        for cat, d in self.resources.items():
+            for name, resource in d.items():
+                out[f"{cat}:{name}"] = resource.capacity - resource.count
+
+        return out
 
     def initialize_library_path(self, path):
         """

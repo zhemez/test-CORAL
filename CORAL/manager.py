@@ -88,6 +88,20 @@ class GlobalManager:
 
         return processed
 
+    @property
+    def resource_history(self):
+        """Return post-processed resource capacity history."""
+
+        processed = []
+        for log in self.library._history:
+
+            new = deepcopy(log)
+            new["time"] = self._start + dt.timedelta(hours=log["time"])
+
+            processed.append(new)
+
+        return processed
+
     def get_results(self, keep_inputs=[]):
         """"""
 
