@@ -83,7 +83,7 @@ if __name__ == '__main__':
         num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
@@ -194,7 +194,7 @@ if __name__ == '__main__':
         fig = plt.figure(figsize=(6, 4), dpi=200)
         ax = fig.add_subplot(111)
 
-        throughput.plot(ax=ax, lw=0.7)
+        throughput.plot.bar(ax=ax, width=0.75)
 
         ax.set_ylim(0, 2000)
 

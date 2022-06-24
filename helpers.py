@@ -75,12 +75,12 @@ future_allocations = {
 current_investment = 150 + 157 + 200 + 400 + 500 #New Bedford, New London, SBMT, NJWP, Charybdis
 wtiv = 500
 port = 400
-investments = {
+investments = {  # Include one 'port' in 2022 to cover additioanl grants for ports that are under construction (tradepoint, SBMT, NJWP)
 'year': [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2028, 2030],
-'base_wtiv': [wtiv, 0, 0, wtiv, 0, 0, 0, 0, 0],
-'high_wtiv': [wtiv, wtiv, 0, wtiv+wtiv, wtiv, 0, 0, 0, 0],
-'add_port': [0, 0, port, port, port, 0, 0, 0, 0],  #Salem, NJWP2, AKT
-'add_ports_fast': [port+port, 0, port, 0, 0, 0, 0, 0, 0],  #Salem, NJWP2, AKT
+'base_wtiv': [wtiv+port, 0, 0, wtiv, 0, 0, 0, 0, 0],
+'high_wtiv': [wtiv+port, wtiv, 0, wtiv+wtiv, wtiv, 0, 0, 0, 0],
+'add_port': [port, 0, port, port, port, 0, 0, 0, 0],  #Salem, NJWP2, AKT
+'add_ports_fast': [port+port+port, 0, port, 0, 0, 0, 0, 0, 0],  #Salem, NJWP2, AKT
 }
 
 plot_names_map = {
