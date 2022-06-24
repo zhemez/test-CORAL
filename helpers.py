@@ -1,11 +1,12 @@
 import datetime as dt
-
+import numpy as np
 # Define input files and configurations
 
 input_pipelines = {
 'base': "east_coast_analysis/pipelines/pipeline_OWMR2022_base.csv",
 'add_ports': "east_coast_analysis/pipelines/pipeline_OWMR2022_add_ports.csv",
 'add_ports_fast': "east_coast_analysis/pipelines/pipeline_OWMR2022_add_ports_fast.csv",
+'reduce_ports': "east_coast_analysis/pipelines/pipeline_OWMR2022_reduce_ports.csv",
 # 'no_akt': "east_coast_analysis/pipelines/pipeline_OWMR2022.csv",
 # 'delays': "east_coast_analysis/pipelines/pipeline_OWMR2022_delays.csv",
 # 'fast': "east_coast_analysis/pipelines/pipeline_OWMR2022_akt_fast.csv",
@@ -47,7 +48,7 @@ future_allocations = {
 'base': [
     ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
     ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
+    # ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
     ],
 'high_wtiv':[
     ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
@@ -69,4 +70,26 @@ future_allocations = {
     ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
     ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
     ],
+}
+
+current_investment = 150 + 157 + 200 + 400 + 500 #New Bedford, New London, SBMT, NJWP, Charybdis
+wtiv = 500
+port = 400
+investments = {  # Include one 'port' in 2022 to cover additioanl grants for ports that are under construction (tradepoint, SBMT, NJWP)
+'year': [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2028, 2030],
+'base_wtiv': [wtiv+port, 0, 0, wtiv, 0, 0, 0, 0, 0],
+'high_wtiv': [wtiv+port, wtiv, 0, wtiv+wtiv, wtiv, 0, 0, 0, 0],
+'add_port': [port, 0, port, port, port, 0, 0, 0, 0],  #Salem, NJWP2, AKT
+'add_ports_fast': [port+port+port, 0, port, 0, 0, 0, 0, 0, 0],  #Salem, NJWP2, AKT
+}
+
+plot_names_map = {
+'baseline': 'Existing \ninfrastructure',
+'add_wtiv': 'Add WTIVs',
+'add_ports': 'Add ports',
+'add_wtiv_ports': 'Add WTIVS \nand ports',
+'add_wtiv_eur_ports': 'Add US and Eur WTIVs \n and ports',
+'reduce_ports': 'Reduced ports',
+'add_ports_fast': 'Add ports \n(early constr.)',
+'add_wtiv_ports_fast ': 'Add WTIVS \nand ports (early constr.)',
 }
