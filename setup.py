@@ -10,5 +10,5 @@ setup(
     name="CORAL",
     description=long_description,
     packages=find_packages(),
-    install_requires=["orbit-nrel==1.0.5", "jupyterlab"],
+    install_requires=["orbit-nrel==1.0.6", "jupyterlab"],
 )
