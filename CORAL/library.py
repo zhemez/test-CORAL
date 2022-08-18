@@ -84,7 +84,7 @@ class SharedLibrary:
         self.check_requests()
 
         return {
-            k: self.resources[k][v].data for k, v in request.resources.items()
+            k: self.resources[k.split(".")[-1]][v].data for k, v in request.resources.items()
         }
 
     def release(self, request):
@@ -100,7 +100,7 @@ class SharedLibrary:
         for k, v in request.resources.items():
 
             try:
-                self.resources[k][v].release(request.requests[k])
+                self.resources[k.split(".")[-1]][v].release(request.requests[k])
 
             except RuntimeError:
                 pass
@@ -115,13 +115,16 @@ class SharedLibrary:
             proceed = True
 
             for k, v in request.resources.items():
+                
+                k = k.split(".")[-1]
                 if self.resources[k][v].capacity == self.resources[k][v].count:
                     proceed = False
                     break
 
             if proceed:
+
                 request.requests = {
-                    k: self.resources[k][v].request()
+                    k: self.resources[k.split(".")[-1]][v].request()
                     for k, v in request.resources.items()
                 }
 
