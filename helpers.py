@@ -16,6 +16,7 @@ initial_allocations = {
 # Existing
 'base': {
     "wtiv": ('example_wtiv', 1),
+    "hlv": ('example_heavy_lift_vessel', 1),
     "feeder": ('example_feeder', 4),
     "port": [
         ('new_bedford', 1),

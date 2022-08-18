@@ -83,7 +83,7 @@ if __name__ == '__main__':
         num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
