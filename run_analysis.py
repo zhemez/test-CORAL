@@ -48,10 +48,14 @@ scenarios = {
      #              'initial': ia['base'],
      #              'future': fa['add_wtiv_ports'],
      #              'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
-     'add_wtiv_eur_hlv_ports': {'pipeline': ip['add_ports'],
+     'add_wtiv_eur_ports': {'pipeline': ip['add_ports'],
                   'initial': ia['add_wtiv'],
-                  'future': fa['add_wtiv_hlv_ports'],
+                  'future': fa['add_wtiv_ports'],
                   'invest': [inv['high_wtiv'], inv['add_port']],},
+      'add_hlv_wtiv_eur_ports': {'pipeline': ip['add_ports'],
+                   'initial': ia['add_wtiv_hlv'],
+                   'future': fa['add_wtiv_hlv_ports'],
+                   'invest': [inv['high_wtiv'], inv['add_port']],},
 }
 invest_year_base = [dt.datetime(yi, 1, 1) for yi in inv['year']]
 cumsum_plot = True
@@ -83,7 +87,7 @@ if __name__ == '__main__':
         num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
