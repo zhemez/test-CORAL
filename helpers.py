@@ -15,8 +15,7 @@ input_pipelines = {
 initial_allocations = {
 # Existing
 'base': {
-    "wtiv": ('example_wtiv', 1),
-    "hlv": ('example_heavy_lift_vessel', 1),
+    "wtiv": [('example_wtiv', 1),('example_heavy_lift_vessel', 3)],
     "feeder": ('example_feeder', 4),
     "port": [
         ('new_bedford', 1),
@@ -30,7 +29,7 @@ initial_allocations = {
     ]
     },
 'add_wtiv': {
-    "wtiv": ('example_wtiv', 2),
+    "wtiv": [('example_wtiv', 1), ('example_heavy_lift_vessel', 5)],
     "feeder": ('example_feeder', 4),
     "port": [
         ('new_bedford', 1),
@@ -71,6 +70,15 @@ future_allocations = {
     ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
     ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
     ],
+'add_wtiv_hlv_ports': [
+    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+    # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+    # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
+    # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+    # ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
+    ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
+]
 }
 
 current_investment = 150 + 157 + 200 + 400 + 500 #New Bedford, New London, SBMT, NJWP, Charybdis
@@ -90,6 +98,7 @@ plot_names_map = {
 'add_ports': 'Add ports',
 'add_wtiv_ports': 'Add WTIVS \nand ports',
 'add_wtiv_eur_ports': 'Add US and Eur WTIVs \n and ports',
+'add_wtiv_eur_hlv_ports': 'Add US and Eur WTIVs,  \n US HLVs, and ports',
 'reduce_ports': 'Reduced ports',
 'add_ports_fast': 'Add ports \n(early constr.)',
 'add_wtiv_ports_fast ': 'Add WTIVS \nand ports (early constr.)',

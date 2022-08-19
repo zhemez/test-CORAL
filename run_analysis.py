@@ -24,14 +24,14 @@ scenarios = {
                  'initial': ia['base'],
                  'future': fa['base'],
                  'invest': [inv['base_wtiv']]},
-    'add_wtiv': {'pipeline': ip['base'],
-                 'initial': ia['base'],
-                 'future': fa['high_wtiv'],
-                 'invest': [inv['high_wtiv']],},
-    'add_ports': {'pipeline': ip['add_ports'],
-                 'initial': ia['base'],
-                 'future': fa['add_ports'],
-                 'invest': [inv['base_wtiv'], inv['add_port']],},
+    # 'add_wtiv': {'pipeline': ip['base'],
+    #              'initial': ia['base'],
+    #              'future': fa['high_wtiv'],
+    #              'invest': [inv['high_wtiv']],},
+    # 'add_ports': {'pipeline': ip['add_ports'],
+    #              'initial': ia['base'],
+    #              'future': fa['add_ports'],
+    #              'invest': [inv['base_wtiv'], inv['add_port']],},
      # 'reduce_ports': {'pipeline': ip['reduce_ports'],
      #              'initial': ia['base'],
      #              'future': fa['high_wtiv'],
@@ -40,17 +40,17 @@ scenarios = {
      #              'initial': ia['base'],
      #              'future': fa['add_ports'],
      #              'invest': [inv['base_wtiv'], inv['add_ports_fast']],},
-     'add_wtiv_ports': {'pipeline': ip['add_ports'],
-               'initial': ia['base'],
-               'future': fa['add_wtiv_ports'],
-               'invest': [inv['high_wtiv'], inv['add_port']],},
+     # 'add_wtiv_ports': {'pipeline': ip['add_ports'],
+     #           'initial': ia['base'],
+     #           'future': fa['add_wtiv_ports'],
+     #           'invest': [inv['high_wtiv'], inv['add_port']],},
      # 'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
      #              'initial': ia['base'],
      #              'future': fa['add_wtiv_ports'],
      #              'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
-     'add_wtiv_eur_ports': {'pipeline': ip['add_ports'],
+     'add_wtiv_eur_hlv_ports': {'pipeline': ip['add_ports'],
                   'initial': ia['add_wtiv'],
-                  'future': fa['add_wtiv_ports'],
+                  'future': fa['add_wtiv_hlv_ports'],
                   'invest': [inv['high_wtiv'], inv['add_port']],},
 }
 invest_year_base = [dt.datetime(yi, 1, 1) for yi in inv['year']]
@@ -88,7 +88,8 @@ if __name__ == '__main__':
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
 
-        total_wtiv = np.sum([num_wtiv]+new_wtiv)
+        # total_wtiv = np.sum([num_wtiv]+new_wtiv)
+        total_wtiv = 99
         total_ports = np.sum([num_port]+new_ports)
 
         fig_name = str(total_wtiv)+'wtiv_'+str(total_ports)+'ports_'+name
