@@ -23,7 +23,7 @@ scenarios = {
     'baseline': {'pipeline': ip['base'],
                  'initial': ia['base2'],
                  'future': fa['base'],
-                 'invest': [inv['base_wtiv']]},
+                 'invest': [inv['base']]},
     # 'add_wtiv': {'pipeline': ip['base'],
     #              'initial': ia['base'],
     #              'future': fa['high_wtiv'],
@@ -63,7 +63,7 @@ scenarios = {
      'add_3hlv_4wtiv_eur_ports': {'pipeline': ip['add_ports'],
                   'initial': ia['base3'],
                   'future': fa['add_4wtiv_hlv_ports'],
-                  'invest': [inv['high_wtiv'], inv['add_port']],},
+                  'invest': [inv['add_3hlv_4wtiv_eur_ports']],},
 }
 invest_year_base = [dt.datetime(yi, 1, 1) for yi in inv['year']]
 cumsum_plot = True
@@ -165,7 +165,7 @@ if __name__ == '__main__':
             axR = ax.twinx()
             axR.plot(invest_year, np.cumsum(annual_invest), 'r', zorder=7)
             axR.set_ylabel('Additional investment required, $M')
-            axR.set_ylim([0,8000])
+            axR.set_ylim([0,10000])
             axR.get_yaxis().set_major_formatter(
                 mpl.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
             axR.tick_params(axis='y', colors='red')
@@ -243,7 +243,7 @@ if __name__ == '__main__':
 
     ax2.bar(x_ind+width/2, investment_2030, width, color='#FFA319')
     ax2.set_ylabel('Additional investment required, $M')
-    ax2.set_ylim([0,5000])
+    ax2.set_ylim([0,8000])
     ax2.get_yaxis().set_major_formatter(
         mpl.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
 

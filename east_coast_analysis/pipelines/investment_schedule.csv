@@ -1,0 +1,27 @@
+﻿, ,Already invest,2022,2023,2024,2025,2026,2027,2028,2029,2030,Notes
+Ports,NB,150,,,,,,,,,,
+,NL,157,,,,,,,,,,
+,PMT,200,,,,,,,,,,Upgrade existing port
+,NJWP 1,200,200,,,,,,,,,Build new port
+,TPA,13,187,,,,,,,,,Upgrade existing port
+,SBMT,,,,260,,,,,,,Upgrade existing port
+,NJWP 2,,,,,200,,,,,,Expand existing
+,AKT,,,,,,400,,,,,Build new port
+WTIV,Chary,500,,,,,,,,,,
+,Maersk,,500,,,,,,,,,
+,New WTIV,,,500,,,,,,,,
+,New WTIV,,,,,500,,,,,,
+,New WTIV,,,,,500,,,,,,
+HLV,New HLV,,,,500,,,,,,,
+,New HLV,,,,500,,,,,,,
+,New HLV,,,,500,,,,,,,Totals
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+Baseline annual ports,,720,387,0,260,0,0,0,0,0,,1367
+Baseline annual vessels,,500,500,0,0,0,0,0,0,0,,1000
+Expanded annual ports,,720,387,0,260,200,400,0,0,0,,1967
+Expanded annual vessels,,500,500,500,1500,1000,0,0,0,0,,4000
+,,,,,,,,,,,,
+Assumptions,,,,,,,,,,,,
+Investment has to be made 3 years prior to operation,,,,,,,,,,,,
+Opeation date,,,,,,,,,,,,
