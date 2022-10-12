@@ -132,7 +132,7 @@ class Pipeline:
             # Vessels
 
             config["wtiv"] = "_shared_pool_:example_wtiv"
-            config.update({'MonopileInstallation': {'wtiv': "_shared_pool_:example_heavy_lift_vessel"}})
+            config.update({'MonopileInstallation': {'wtiv': "_shared_pool_:example_heavy_lift_vessel", "feeder": "_shared_pool_:example_feeder"}})
 
             port = config["port"].replace("_shared_pool_:", "")
             if port in ["sbmt", "new_bedford"] or self.enforce_feeders:

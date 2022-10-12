@@ -116,6 +116,10 @@ future_allocations = {
     ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
     ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
     ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2026, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2026, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2028, 1, 1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2028, 1, 1)]],
     # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2029, 1, 1)]],
     # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
     # ['wtiv', 'example_wtiv', [dt.datetime(2029, 1, 1)]],
@@ -135,7 +139,7 @@ investments = {  # Include one 'port' in 2022 to cover additioanl grants for por
 # 'add_3hlv_4wtiv_eur_ports': [port+wtiv, ]
 'base': [1270, 0, 0, 887, 0, 260, 0, 0, 0, 0, 0],
 'add_3hlv_4wtiv_eur_ports': [1270, 0, 0, 887, 500, 1910, 1200, 0, 0, 0, 0]
-}  # Fixed bottom ports only 
+}  # Fixed bottom ports only
 
 plot_names_map = {
 'baseline': 'Existing \ninfrastructure',
