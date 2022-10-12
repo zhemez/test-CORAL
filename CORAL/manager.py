@@ -7,6 +7,7 @@ __email__ = "jake.nunemaker@nrel.gov"
 import datetime as dt
 from copy import deepcopy
 from collections import Counter
+from benedict import benedict
 
 import numpy as np
 import pandas as pd
@@ -127,7 +128,7 @@ class GlobalManager:
             name = self._get_unique_name(config.pop("project_name", "Project"))
             start = config.pop("project_start", 0)
 
-            self.env.process(self._initialize(name, start, config))
+            self.env.process(self._initialize(name, start, benedict(config)))
 
     def _get_unique_name(self, name):
         """
@@ -212,11 +213,11 @@ class GlobalManager:
         """
 
         resources = []
-        for k, v in config.items():
+        for k, v in config.flatten("//").items():
             try:
                 if "_shared_pool_" in v:
                     target = v.split(":")[1]
-                    resources.append((k, target))
+                    resources.append((k.replace("//", "."), target))
 
             except TypeError:
                 pass

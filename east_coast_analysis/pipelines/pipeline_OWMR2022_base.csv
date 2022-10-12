@@ -30,8 +30,8 @@ Skipjack 1,DE,38.375038,-74.408704,120,12MW_generic,40,480,30,monopile,2026,2025
 Skipjack 2,DE,38.375038,-74.408704,808,12MW_generic,40,480,30,monopile,2027,2026,7/1/2026 0:00,tradepoint,central,
 MarWin,MD,38.356944,-74.768333,248,12MW_generic,40,480,27,monopile,2026,2025,6/1/2025 0:00,tradepoint,central,Updated start date/COD 
 Momentum Wind,MD,38.356944,-74.768333,846,12MW_generic,40,480,50,monopile,2027,2026,5/1/2026 0:00,tradepoint,central,"Consolidated Momentum a,b"
-Coastal Virginia Offshore Wind,VA,36.800169,-75.365973,2640,15MW_generic,25,100,43,monopile,2026,2024,5/1/2024 0:00,portsmouth,south,"Consolidated CVOW a, b, c"
-Kitty Hawk 1,NC,36.069184,-75.106375,1000,15MW_generic,40,150,43,monopile,2026,2025,5/1/2025 0:00,portsmouth,south,"Consolidated Kitty Hawk a, b, c and split out COP/residual.  Updated expected COD/start date"
+Coastal Virginia Offshore Wind,VA,36.800169,-75.365973,2640,15MW_generic,25,100,43,monopile,2026,2024,5/1/2025 0:00,portsmouth,south,"Consolidated CVOW a, b, c"
+Kitty Hawk 1,NC,36.069184,-75.106375,1000,15MW_generic,40,150,43,monopile,2026,2025,6/1/2025 0:00,portsmouth,south,"Consolidated Kitty Hawk a, b, c and split out COP/residual.  Updated expected COD/start date"
 Kitty Hawk residual,NC,36.069184,-75.106375,1500,15MW_generic,40,150,43,monopile,2027,2026,5/1/2029 0:00,portsmouth,south,
 TotalEnergies Renewables USA,NC,33.2812854,-78.8561473,667,15MW_generic,30,200,50,monopile,2031,2030,5/1/2030 0:00,portsmouth,south,Added.  Need to review site specs
 Duke Energy Renewables Wind,NC,33.2812854,-78.8561473,670,15MW_generic,30,200,50,monopile,2031,2030,5/1/2030 0:00,portsmouth,south,Added.  Need to review site specs

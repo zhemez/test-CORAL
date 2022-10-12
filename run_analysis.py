@@ -21,17 +21,19 @@ from helpers import plot_names_map as pnm
 
 scenarios = {
     'baseline': {'pipeline': ip['base'],
-                 'initial': ia['base'],
+                 'initial': ia['base2'],
                  'future': fa['base'],
-                 'invest': [inv['base_wtiv']]},
-    'add_wtiv': {'pipeline': ip['base'],
-                 'initial': ia['base'],
-                 'future': fa['high_wtiv'],
-                 'invest': [inv['high_wtiv']],},
-    'add_ports': {'pipeline': ip['add_ports'],
-                 'initial': ia['base'],
-                 'future': fa['add_ports'],
-                 'invest': [inv['base_wtiv'], inv['add_port']],},
+                 'invest': [inv['base']],
+                 'color_install': '#3D7F0B',
+                 'color_delay': '#BBEB96'},
+    # 'add_wtiv': {'pipeline': ip['base'],
+    #              'initial': ia['base'],
+    #              'future': fa['high_wtiv'],
+    #              'invest': [inv['high_wtiv']],},
+    # 'add_ports': {'pipeline': ip['add_ports'],
+    #              'initial': ia['base'],
+    #              'future': fa['add_ports'],
+    #              'invest': [inv['base_wtiv'], inv['add_port']],},
      # 'reduce_ports': {'pipeline': ip['reduce_ports'],
      #              'initial': ia['base'],
      #              'future': fa['high_wtiv'],
@@ -40,18 +42,33 @@ scenarios = {
      #              'initial': ia['base'],
      #              'future': fa['add_ports'],
      #              'invest': [inv['base_wtiv'], inv['add_ports_fast']],},
-     'add_wtiv_ports': {'pipeline': ip['add_ports'],
-               'initial': ia['base'],
-               'future': fa['add_wtiv_ports'],
-               'invest': [inv['high_wtiv'], inv['add_port']],},
+     # 'add_wtiv_ports': {'pipeline': ip['add_ports'],
+     #           'initial': ia['base'],
+     #           'future': fa['add_wtiv_ports'],
+     #           'invest': [inv['high_wtiv'], inv['add_port']],},
      # 'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
      #              'initial': ia['base'],
      #              'future': fa['add_wtiv_ports'],
      #              'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
-     'add_wtiv_eur_ports': {'pipeline': ip['add_ports'],
-                  'initial': ia['add_wtiv'],
-                  'future': fa['add_wtiv_ports'],
-                  'invest': [inv['high_wtiv'], inv['add_port']],},
+     # 'add_wtiv_eur_ports': {'pipeline': ip['add_ports'],
+     #              'initial': ia['add_wtiv'],
+     #              'future': fa['add_wtiv_ports'],
+     #              'invest': [inv['high_wtiv'], inv['add_port']],},
+     # 'add_2hlv_wtiv_eur_ports': {'pipeline': ip['add_ports'],
+     #              'initial': ia['base2'],
+     #              'future': fa['add_4wtiv_hlv_ports'],
+     #              'invest': [inv['high_wtiv'], inv['add_port']],},
+     #  'add_3hlv_wtiv_eur_ports': {'pipeline': ip['add_ports'],
+     #               'initial': ia['base3'],
+     #               'future': fa['add_wtiv_hlv_ports'],
+     #               'invest': [inv['high_wtiv'], inv['add_port']],},
+     'add_3hlv_4wtiv_eur_ports': {'pipeline': ip['add_ports'],
+                  'initial': ia['base3'],
+                  'future': fa['add_4wtiv_hlv_ports'],
+                  'invest': [inv['add_3hlv_4wtiv_eur_ports']],
+                  'color_install': '#0D3D5C',
+                  'color_delay': '#7EA5BF'
+                  },
 }
 invest_year_base = [dt.datetime(yi, 1, 1) for yi in inv['year']]
 cumsum_plot = True
@@ -75,6 +92,8 @@ if __name__ == '__main__':
         allocations = scenario['initial']
         future_resources = scenario['future']
         investment = scenario['invest']
+        color_install = scenario['color_install']
+        color_delay = scenario['color_delay']
 
         projects = os.path.join(os.getcwd(), pipeline)
         base = os.path.join(os.getcwd(), "east_coast_analysis/base.yaml")
@@ -88,10 +107,12 @@ if __name__ == '__main__':
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
 
-        total_wtiv = np.sum([num_wtiv]+new_wtiv)
+        # total_wtiv = np.sum([num_wtiv]+new_wtiv)
+        total_wtiv = 99
         total_ports = np.sum([num_port]+new_ports)
 
-        fig_name = str(total_wtiv)+'wtiv_'+str(total_ports)+'ports_'+name
+        # fig_name = str(total_wtiv)+'wtiv_'+str(total_ports)+'ports_'+name
+        fig_name = name
 
 
         for f in future_resources:
@@ -120,8 +141,8 @@ if __name__ == '__main__':
         fig = plt.figure(figsize=(10, 6), dpi=300)
         ax = fig.add_subplot(111)
 
-        df["Date Finished"].plot(kind="barh", ax=ax, zorder=4, label="Project Installation", color="#b1b1b1")
-        df["Date Started"].plot(kind="barh", color="#e9e9e9", ax=ax, zorder=4, label="Project Delay", hatch="////", linewidth=0.5)
+        df["Date Finished"].plot(kind="barh", ax=ax, zorder=4, label="Project Installation", color=color_install)
+        df["Date Started"].plot(kind="barh", color=color_delay, ax=ax, zorder=4, label="Project Delay", hatch="////", linewidth=0.5)
         df["Date Initialized"].plot(kind='barh', ax=ax, zorder=4, label="__nolabel__", color='w')
 
         # Plot formatting
@@ -144,16 +165,18 @@ if __name__ == '__main__':
                 annual_invest = [x+y for x,y in zip(annual_invest, i)]
             if df['Date Finished'].max() > invest_year_base[-1]:
                 invest_year.append(df['Date Finished'].max())
-                annual_invest.append(annual_invest[-1])
+                annual_invest.append(0)
             # else:
             #     invest_year = invest_year_base
 
             axR = ax.twinx()
             axR.plot(invest_year, np.cumsum(annual_invest), 'r', zorder=7)
             axR.set_ylabel('Additional investment required, $M')
-            axR.set_ylim([0,6000])
-            axR.tick_params(axis='y', colors='red')
-            axR.yaxis.label.set_color('red')
+            axR.set_ylim([0,12000])
+            axR.get_yaxis().set_major_formatter(
+                mpl.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+            axR.tick_params(axis='y', colors='r')
+            axR.yaxis.label.set_color('r')
 
         fig.subplots_adjust(left=0.25)
 
@@ -227,9 +250,13 @@ if __name__ == '__main__':
 
     ax2.bar(x_ind+width/2, investment_2030, width, color='#FFA319')
     ax2.set_ylabel('Additional investment required, $M')
+    ax2.set_ylim([0,8000])
+    ax2.get_yaxis().set_major_formatter(
+        mpl.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+
     ax1.set_xticks(x_ind)
     plot_names = [pnm[n] for n in names]
-    ax1.set_xticklabels(plot_names, rotation=90)
+    ax1.set_xticklabels(plot_names, rotation=45)
 
     handles = [
         Patch(facecolor=color, label=label)
