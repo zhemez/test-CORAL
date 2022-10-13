@@ -83,9 +83,11 @@ class SharedLibrary:
         self._requests.append(request)
         self.check_requests()
 
-        return {
+        _req = {
             k: self.resources[k.split(".")[-1]][v].data for k, v in request.resources.items()
         }
+
+        return _req
 
     def release(self, request):
         """
@@ -98,10 +100,8 @@ class SharedLibrary:
         """
 
         for k, v in request.resources.items():
-
             try:
                 self.resources[k.split(".")[-1]][v].release(request.requests[k])
-
             except RuntimeError:
                 pass
 
@@ -115,7 +115,7 @@ class SharedLibrary:
             proceed = True
 
             for k, v in request.resources.items():
-                
+
                 k = k.split(".")[-1]
                 if self.resources[k][v].capacity == self.resources[k][v].count:
                     proceed = False
@@ -171,7 +171,6 @@ class SharedLibrary:
                         self.env, cap, path, self.check_requests
                     )
                     resources[name] = resource
-
                 except FileNotFoundError:
                     print(
                         f"Warning: Data not found for shared resource '{name}'."

@@ -20,55 +20,29 @@ from helpers import investments as inv
 from helpers import plot_names_map as pnm
 
 scenarios = {
-    'baseline': {'pipeline': ip['base'],
-                 'initial': ia['base2'],
-                 'future': fa['base'],
-                 'invest': [inv['base']],
-                 'color_install': '#3D7F0B',
-                 'color_delay': '#BBEB96'},
-    # 'add_wtiv': {'pipeline': ip['base'],
+    # 'baseline': {'pipeline': ip['base'],
     #              'initial': ia['base'],
-    #              'future': fa['high_wtiv'],
-    #              'invest': [inv['high_wtiv']],},
-    # 'add_ports': {'pipeline': ip['add_ports'],
-    #              'initial': ia['base'],
-    #              'future': fa['add_ports'],
-    #              'invest': [inv['base_wtiv'], inv['add_port']],},
-     # 'reduce_ports': {'pipeline': ip['reduce_ports'],
-     #              'initial': ia['base'],
-     #              'future': fa['high_wtiv'],
-     #              'invest': [inv['high_wtiv']],},
-     # 'add_ports_fast': {'pipeline': ip['add_ports_fast'],
-     #              'initial': ia['base'],
-     #              'future': fa['add_ports'],
-     #              'invest': [inv['base_wtiv'], inv['add_ports_fast']],},
-     # 'add_wtiv_ports': {'pipeline': ip['add_ports'],
-     #           'initial': ia['base'],
-     #           'future': fa['add_wtiv_ports'],
-     #           'invest': [inv['high_wtiv'], inv['add_port']],},
-     # 'add_wtiv_ports_fast': {'pipeline': ip['add_ports_fast'],
-     #              'initial': ia['base'],
-     #              'future': fa['add_wtiv_ports'],
-     #              'invest': [inv['high_wtiv'], inv['add_ports_fast']],},
-     # 'add_wtiv_eur_ports': {'pipeline': ip['add_ports'],
-     #              'initial': ia['add_wtiv'],
-     #              'future': fa['add_wtiv_ports'],
-     #              'invest': [inv['high_wtiv'], inv['add_port']],},
-     # 'add_2hlv_wtiv_eur_ports': {'pipeline': ip['add_ports'],
-     #              'initial': ia['base2'],
-     #              'future': fa['add_4wtiv_hlv_ports'],
-     #              'invest': [inv['high_wtiv'], inv['add_port']],},
-     #  'add_3hlv_wtiv_eur_ports': {'pipeline': ip['add_ports'],
-     #               'initial': ia['base3'],
-     #               'future': fa['add_wtiv_hlv_ports'],
-     #               'invest': [inv['high_wtiv'], inv['add_port']],},
-     'add_3hlv_4wtiv_eur_ports': {'pipeline': ip['add_ports'],
-                  'initial': ia['base3'],
-                  'future': fa['add_4wtiv_hlv_ports'],
-                  'invest': [inv['add_3hlv_4wtiv_eur_ports']],
-                  'color_install': '#0D3D5C',
-                  'color_delay': '#7EA5BF'
-                  },
+    #              'future': fa['base'],
+    #              'invest': [inv['base']],
+    #              'enforce_feeders': False,
+    #              'color_install': '#3D7F0B',
+    #              'color_delay': '#BBEB96'},
+    #  'US_WTIV': {'pipeline': ip['add_ports'],
+    #               'initial': ia['us_wtiv'],
+    #               'future': fa['us_wtiv'],
+    #               'invest': [inv['us_wtiv']],
+    #               'enforce_feeders': False,
+    #               'color_install': '#0D3D5C',
+    #               'color_delay': '#7EA5BF'
+    #               },
+       'US_feeder': {'pipeline': ip['add_ports'],
+                    'initial': ia['us_feeder'],
+                    'future': fa['us_feeder'],
+                    'invest': [inv['us_wtiv']],
+                    'enforce_feeders': True,
+                    'color_install': '#EC6200',
+                    'color_delay': '#FF9245'
+                    },
 }
 invest_year_base = [dt.datetime(yi, 1, 1) for yi in inv['year']]
 cumsum_plot = True
@@ -92,17 +66,18 @@ if __name__ == '__main__':
         allocations = scenario['initial']
         future_resources = scenario['future']
         investment = scenario['invest']
+        feeders = scenario['enforce_feeders']
         color_install = scenario['color_install']
         color_delay = scenario['color_delay']
 
         projects = os.path.join(os.getcwd(), pipeline)
         base = os.path.join(os.getcwd(), "east_coast_analysis/base.yaml")
-        pipeline = Pipeline(projects, base, regional_ports=False)
+        pipeline = Pipeline(projects, base, regional_ports=False, enforce_feeders=feeders)
 
         num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
