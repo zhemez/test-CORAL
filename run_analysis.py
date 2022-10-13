@@ -20,21 +20,21 @@ from helpers import investments as inv
 from helpers import plot_names_map as pnm
 
 scenarios = {
-    # 'baseline': {'pipeline': ip['base'],
-    #              'initial': ia['base'],
-    #              'future': fa['base'],
-    #              'invest': [inv['base']],
-    #              'enforce_feeders': False,
-    #              'color_install': '#3D7F0B',
-    #              'color_delay': '#BBEB96'},
-    #  'US_WTIV': {'pipeline': ip['add_ports'],
-    #               'initial': ia['us_wtiv'],
-    #               'future': fa['us_wtiv'],
-    #               'invest': [inv['us_wtiv']],
-    #               'enforce_feeders': False,
-    #               'color_install': '#0D3D5C',
-    #               'color_delay': '#7EA5BF'
-    #               },
+    'baseline': {'pipeline': ip['base'],
+                 'initial': ia['base'],
+                 'future': fa['base'],
+                 'invest': [inv['base']],
+                 'enforce_feeders': False,
+                 'color_install': '#3D7F0B',
+                 'color_delay': '#BBEB96'},
+     'US_WTIV': {'pipeline': ip['add_ports'],
+                  'initial': ia['us_wtiv'],
+                  'future': fa['us_wtiv'],
+                  'invest': [inv['us_wtiv']],
+                  'enforce_feeders': False,
+                  'color_install': '#0D3D5C',
+                  'color_delay': '#7EA5BF'
+                  },
        'US_feeder': {'pipeline': ip['add_ports'],
                     'initial': ia['us_feeder'],
                     'future': fa['us_feeder'],
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         num_wtiv = allocations['wtiv'][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]

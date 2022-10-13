@@ -10,7 +10,7 @@ input_pipelines = {
 initial_allocations = {
 'base': {
     "wtiv": [('example_wtiv', 2),('example_heavy_lift_vessel', 2)],
-    "feeder": ('example_feeder', 4),
+    "feeder": ('example_feeder', 2),
     "port": [
         ('new_bedford', 1),
         ('new_london', 1),
@@ -24,7 +24,7 @@ initial_allocations = {
     },
 'us_wtiv': {
     "wtiv": [('example_wtiv', 2),('example_heavy_lift_vessel', 3)],  # Need an extra HLV from the start of th esimulation
-    "feeder": ('example_feeder', 4),
+    "feeder": ('example_feeder', 2),
     "port": [
         ('new_bedford', 1),
         ('new_london', 1),
@@ -74,8 +74,8 @@ future_allocations = {
     # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
     # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
     # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2026,1,1)]],
+    ['feeder', 'example_feeder', [dt.datetime(2026,1,1)]],
     # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
     # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
     # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
