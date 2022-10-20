@@ -2,8 +2,7 @@
 Vineyard Wind 1,MA,41.00642,-70.47765,800,13MW_generic,42,100,33,monopile,2024,2023,5/1/2023 0:00,new_bedford,northeast,
 South Fork,MA/RI,41.078046,-71.543159,132,11MW_generic,40,57,56,monopile,2023,2023,5/1/2023 0:00,new_london,northeast,
 Revolution Wind,MA/RI,41.270313,-71.144904,704,11MW_generic,40,80,15,monopile,2024,2023,6/1/2023 0:00,new_london,northeast,
-Sunrise Wind 1,MA/RI,40.979722,-71.279167,880,12MW_generic,40,75,48,monopile,2025,2024,6/1/2024 0:00,new_london,northeast,Updated expected COD/start date
-Sunrise Wind residual,MA/RI,40.979722,-71.279167,880,15MW_generic,40,240,48,monopile,2028,2027,5/1/2027 0:00,new_bedford,northeast,Added. 
+Sunrise Wind 1,MA/RI,40.979722,-71.279167,924,12MW_generic,40,75,48,monopile,2025,2024,6/1/2024 0:00,new_london,northeast,Updated expected COD/start date
 Bay State Wind,MA,40.96,-70.829972,2000,15MW_generic,43,65,33,monopile,2030,2028,5/1/2028 0:00,new_london,northeast,"Consolidated Bay state a, b, c.  Updated expected COD/start date.  Updated to New London"
 Park City Wind,MA,40.917778,-70.885278,804,15MW_generic,40,300,37,monopile,2026,2025,6/1/2025 0:00,new_bedford,northeast,Assumes Salem (and pushed start date to 2025)
 Commonwealth Wind,MA,0,0,1232,15MW_generic,40,300,50,monopile,2027,2026,5/1/2026 0:00,new_bedford,northeast,Updated from VW south (residual).  Assumes Salem.  Update start date/COD (Salem readiness)
@@ -24,7 +23,7 @@ Invenergy Wind Offshore,NY,39.726,-73.156,934,15MW_generic,46,280,50,monopile,20
 Atlantic Shores Offshore Wind 1,NJ,39.335264,-73.954407,1510,15MW_generic,40,150,25,monopile,2027,2026,5/1/2026 0:00,njwp,central,Updated start date
 Atlantic Shores Offshore Wind residual,NJ,39.335264,-73.954407,1500,15MW_generic,40,150,25,monopile,2031,2030,5/1/2030 0:00,njwp,central,Match COD from phase 1 report
 Garden State Offshore Energy,DE,39.08,-74.3106,1000,15MW_generic,40,105,17,monopile,2030,2029,5/1/2029 0:00,njwp,central,Match COD from phase 1 report
-Ocean Wind 1,NJ,39.008225,-74.132881,1100,13MW_generic,28,128,25,monopile,2026,2025,6/1/2025 0:00,njwp,central,Updated start date/COD
+Ocean Wind 1,NJ,39.008225,-74.132881,1100,13MW_generic,28,128,25,monopile,2025,2024,6/1/2024 0:00,njwp,central,Updated start date/COD
 Ocean Wind 2,NJ,39.008225,-74.132881,1148,15MW_generic,28,128,25,monopile,2028,2027,5/1/2027 0:00,njwp,central,Updated start date/COD
 Skipjack 1,DE,38.375038,-74.408704,120,12MW_generic,40,480,30,monopile,2026,2025,7/1/2025 0:00,tradepoint,central,
 Skipjack 2,DE,38.375038,-74.408704,808,12MW_generic,40,480,30,monopile,2027,2026,7/1/2026 0:00,tradepoint,central,
