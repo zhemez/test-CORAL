@@ -90,11 +90,36 @@ port = 400
 investments = {
     'year': [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2028, 2030, 2031, 2032],
     'base': [1270, 0, 0, 887, 0, 260, 0, 0, 0, 0, 0],
-    'us_wtiv': [1270, 0, 0, 887, 500, 1910, 1200, 0, 0, 0, 0]
+    'us_wtiv': [1270, 0, 0, 887, 500, 1910, 1200, 0, 0, 0, 0],
+    'us_feeder': [1270, 0, 0, 887, 1100, 1910, 1200, 0, 0, 0, 0],
 }  # Fixed bottom ports only
 
 plot_names_map = {
-'baseline': 'Baseline',
-'US_WTIV': 'US_WTIV',
-'US_feeder': 'US_feeder'
+'baseline': 'Baseline scenario',
+'us_wtiv': 'U.S. WTIV scenario',
+'us_feeder': 'U.S. Feeder scenario'
+}
+
+scenario_totals = {
+    'baseline': {
+        'us_wtivs': 2,
+        'foreign_wtivs': 1,
+        'hlvs': 2,
+        'feeders': 4,
+        'ports': 6
+    },
+    'us_wtiv': {
+        'us_wtivs': 5,
+        'foreign_wtivs': 1,
+        'hlvs': 5,
+        'feeders': 4,
+        'ports': 9
+    },
+    'us_feeder': {
+        'us_wtivs': 2,
+        'foreign_wtivs': 4,
+        'hlvs': 5,
+        'feeders': 8,
+        'ports': 9
+    }
 }

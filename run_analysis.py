@@ -18,27 +18,31 @@ from helpers import initial_allocations as ia
 from helpers import future_allocations as fa
 from helpers import investments as inv
 from helpers import plot_names_map as pnm
+from helpers import scenario_totals as st
 
 scenarios = {
     'baseline': {'pipeline': ip['base'],
                  'initial': ia['base'],
                  'future': fa['base'],
                  'invest': [inv['base']],
+                 'totals': st['baseline'],
                  'enforce_feeders': False,
                  'color_install': '#3D7F0B',
                  'color_delay': '#BBEB96'},
-     'US_WTIV': {'pipeline': ip['add_ports'],
+     'us_wtiv': {'pipeline': ip['add_ports'],
                   'initial': ia['us_wtiv'],
                   'future': fa['us_wtiv'],
                   'invest': [inv['us_wtiv']],
+                  'totals': st['us_wtiv'],
                   'enforce_feeders': False,
                   'color_install': '#0D3D5C',
                   'color_delay': '#7EA5BF'
                   },
-       'US_feeder': {'pipeline': ip['add_ports'],
+       'us_feeder': {'pipeline': ip['add_ports'],
                     'initial': ia['us_feeder'],
                     'future': fa['us_feeder'],
                     'invest': [inv['us_wtiv']],
+                    'totals': st['us_feeder'],
                     'enforce_feeders': True,
                     'color_install': '#EC6200',
                     'color_delay': '#FF9245'
@@ -66,6 +70,7 @@ if __name__ == '__main__':
         allocations = scenario['initial']
         future_resources = scenario['future']
         investment = scenario['invest']
+        totals = scenario['totals']
         feeders = scenario['enforce_feeders']
         color_install = scenario['color_install']
         color_delay = scenario['color_delay']
@@ -74,16 +79,16 @@ if __name__ == '__main__':
         base = os.path.join(os.getcwd(), "east_coast_analysis/base.yaml")
         pipeline = Pipeline(projects, base, regional_ports=False, enforce_feeders=feeders)
 
-        num_wtiv = allocations['wtiv'][1]
+        num_wtiv = allocations['wtiv'][1][1]
         num_port = len(allocations['port'])
 
-        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path, weather=weather)
+        manager = GlobalManager(pipeline.configs, allocations, library_path=library_path)
 
         new_wtiv = [1 for fr in future_resources if 'wtiv' in fr]
         new_ports = [1 for fr in future_resources if 'port' in fr]
 
-        # total_wtiv = np.sum([num_wtiv]+new_wtiv)
-        total_wtiv = 99
+        total_wtiv = np.sum([num_wtiv]+new_wtiv)
+        # total_wtiv = 99
         total_ports = np.sum([num_port]+new_ports)
 
         # fig_name = str(total_wtiv)+'wtiv_'+str(total_ports)+'ports_'+name
@@ -130,7 +135,20 @@ if __name__ == '__main__':
 
         ax.axvline(dt.date(2031, 1, 1), lw=0.5, ls="--", color="k", zorder=6)
         installed_capacity = get_installed_capacity_by(df, 2031)
-        ax.text(x=dt.date(2031, 4, 1), y=24, s=f"Capacity installed \nby end of 2030: \n{installed_capacity/1000:,.3} GW", fontsize=20)
+        # ax.text(x=dt.date(2031, 4, 1), y=24, s=f"Capacity installed \nby end of 2030: \n{installed_capacity/1000:,.3} GW", fontsize=16)
+        # ax.text(x=dt.date(2031, 4, 1), y=24, s=f"{installed_capacity/1000:,.3} GW installed by the end of 2030", fontsize=16)
+
+        # plt.title('subtitle', fontsize=16)
+        end_infrastructure = 'Available resources by 2030: \n' + \
+                                str(totals['us_wtivs']) + ' U.S-flagged WTIVs \n' + \
+                                str(totals['foreign_wtivs']) + ' Foreign-flagged WTIVs \n' + \
+                                str(totals['hlvs']) + 'Foreign-flagged HLVs \n' + \
+                                str(totals['feeders']) + ' U.S.-flagged feeder barges \n' + \
+                                str(totals['ports']) + ' Marshaling ports \n'
+        end_deployment = pnm[name] + ':\n' + f"{installed_capacity/1000:,.3} GW of fixed-bottom capacity installed by the end of 2030"
+
+        plt.title(end_deployment, fontsize=16)
+        ax.text(x=dt.date(2031, 4, 1), y=20, s=end_infrastructure, fontsize=12)
 
         # Add cumulative investments
         if cumsum_plot == True:
