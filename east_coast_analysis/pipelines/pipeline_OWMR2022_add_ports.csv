@@ -4,8 +4,8 @@ South Fork,MA/RI,41.078046,-71.543159,132,11MW_generic,40,57,56,monopile,2023,20
 Revolution Wind,MA/RI,41.270313,-71.144904,704,11MW_generic,40,80,15,monopile,2024,2023,6/1/2023 0:00,new_london,northeast,
 Sunrise Wind 1,MA/RI,40.979722,-71.279167,924,12MW_generic,40,75,48,monopile,2025,2024,6/1/2024 0:00,new_london,northeast,Updated expected COD/start date
 Bay State Wind,MA,40.96,-70.829972,2000,15MW_generic,43,65,33,monopile,2030,2028,5/1/2028 0:00,new_london,northeast,"Consolidated Bay state a, b, c.  Updated expected COD/start date.  Updated to New London"
-Park City Wind,MA,40.917778,-70.885278,804,15MW_generic,40,300,37,monopile,2026,2025,6/1/2025 0:00,salem,northeast,Assumes Salem (and pushed start date to 2027)
-Commonwealth Wind,MA,0,0,1232,15MW_generic,40,300,50,monopile,2027,2026,5/1/2026 0:00,salem,northeast,Updated from VW south (residual).  Assumes Salem.  Update start date/COD (Salem readiness)
+Park City Wind,MA,40.917778,-70.885278,804,15MW_generic,40,300,37,monopile,2027,2026,6/1/2026 0:00,salem,northeast,Assumes Salem (and pushed start date to 2027)
+Commonwealth Wind,MA,0,0,1232,15MW_generic,40,300,50,monopile,2028,2027,5/1/2027 0:00,salem,northeast,Updated from VW south (residual).  Assumes Salem.  Update start date/COD (Salem readiness)
 Beacon Wind 1,MA,40.730556,-70.599444,1230,15MW_generic,40,320,96,monopile,2030,2029,5/1/2029 0:00,sbmt,northeast,Updated start date.  Stage out of SBMT
 Beacon Wind residual,MA,40.730556,-70.599444,1200,15MW_generic,40,300,96,monopile,2030,2029,5/1/2029 0:00,akt,northeast,Added.  Stage out of SBMT
 Mayflower Wind 1,MA,40.802396,-70.340331,804,15MW_generic,50,135,60,monopile,2026,2025,5/1/2025 0:00,new_bedford,northeast,Moved date for MF1 back to 2025 and MF2 to 2026
