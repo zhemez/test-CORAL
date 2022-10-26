@@ -29,21 +29,31 @@ scenarios = {
                  'enforce_feeders': False,
                  'color_install': '#3D7F0B',
                  'color_delay': '#BBEB96'},
-     'us_wtiv': {'pipeline': ip['add_ports'],
-                  'initial': ia['us_wtiv'],
-                  'future': fa['us_wtiv'],
-                  'invest': [inv['us_wtiv']],
-                  'totals': st['us_wtiv'],
-                  'enforce_feeders': False,
-                  'color_install': '#0D3D5C',
-                  'color_delay': '#7EA5BF'
-                  },
-       'us_feeder': {'pipeline': ip['add_ports'],
+     # 'us_wtiv': {'pipeline': ip['add_ports'],
+     #              'initial': ia['us_wtiv'],
+     #              'future': fa['us_wtiv'],
+     #              'invest': [inv['us_wtiv']],
+     #              'totals': st['us_wtiv'],
+     #              'enforce_feeders': False,
+     #              'color_install': '#0D3D5C',
+     #              'color_delay': '#7EA5BF'
+     #              },
+      'us_feeder': {'pipeline': ip['add_ports'],
+                   'initial': ia['us_feeder'],
+                   'future': fa['us_feeder'],
+                   'invest': [inv['us_feeder']],
+                   'totals': st['us_feeder'],
+                   'enforce_feeders': True,
+                   'color_install': '#0D3D5C',
+                   'color_delay': '#7EA5BF'
+                   },
+
+       'us_wtiv': {'pipeline': ip['add_ports'],
                     'initial': ia['us_feeder'],
-                    'future': fa['us_feeder'],
+                    'future': fa['us_wtiv'],
                     'invest': [inv['us_wtiv']],
-                    'totals': st['us_feeder'],
-                    'enforce_feeders': True,
+                    'totals': st['us_wtiv'],
+                    'enforce_feeders': False,
                     'color_install': '#EC6200',
                     'color_delay': '#FF9245'
                     },
@@ -139,10 +149,18 @@ if __name__ == '__main__':
         # ax.text(x=dt.date(2031, 4, 1), y=24, s=f"{installed_capacity/1000:,.3} GW installed by the end of 2030", fontsize=16)
 
         # plt.title('subtitle', fontsize=16)
-        end_infrastructure = 'Available resources by 2030: \n' + \
+        if name == 'us_feeder':
+            end_infrastructure = 'Available resources by 2030: \n' + \
+                                    str(totals['us_wtivs']) + ' U.S-flagged WTIV \n' + \
+                                    str(totals['wtivs']) + ' U.S./Foreign-flagged WTIVs \n' + \
+                                    str(totals['hlvs']) + ' Foreign-flagged HLVs \n' + \
+                                    str(totals['feeders']) + ' U.S.-flagged feeder barges \n' + \
+                                    str(totals['ports']) + ' Marshaling ports \n'
+        else:
+            end_infrastructure = 'Available resources by 2030: \n' + \
                                 str(totals['us_wtivs']) + ' U.S-flagged WTIVs \n' + \
                                 str(totals['foreign_wtivs']) + ' Foreign-flagged WTIVs \n' + \
-                                str(totals['hlvs']) + 'Foreign-flagged HLVs \n' + \
+                                str(totals['hlvs']) + ' Foreign-flagged HLVs \n' + \
                                 str(totals['feeders']) + ' U.S.-flagged feeder barges \n' + \
                                 str(totals['ports']) + ' Marshaling ports \n'
         end_deployment = pnm[name] + ':\n' + f"{installed_capacity/1000:,.3} GW of fixed-bottom capacity installed by the end of 2030"

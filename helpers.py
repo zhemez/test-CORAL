@@ -37,7 +37,7 @@ initial_allocations = {
     ]
     },
  'us_feeder': {
-    "wtiv": [('example_wtiv', 4),('example_heavy_lift_vessel', 4)],
+    "wtiv": [('example_wtiv', 2),('example_heavy_lift_vessel', 2)],
     "feeder": ('example_feeder', 2),
     "port": [
         ('new_bedford', 1),
@@ -56,30 +56,34 @@ future_allocations = {
 'base': [
     ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
     ],
+# 'us_wtiv_old': [
+#     ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
+#     ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+#     ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+#     ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
+#     ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
+#     ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
+#     ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
+#     ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
+# ],
 'us_wtiv': [
-    ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
     ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
-    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
-    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2026, 1, 1)]],
     ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
 ],
 'us_feeder': [
-    # ['wtiv', 'example_wtiv', [dt.datetime(2025, 1, 1)]],
-    # ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
-    # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    # ['wtiv', 'example_wtiv', [dt.datetime(2028, 1, 1)]],
-    # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
-    # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
-    # ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2027, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_wtiv', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2026, 1, 1)]],
+    ['wtiv', 'example_heavy_lift_vessel', [dt.datetime(2026, 1, 1)]],
     ['feeder', 'example_feeder', [dt.datetime(2026,1,1)]],
     ['feeder', 'example_feeder', [dt.datetime(2026,1,1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
-    # ['feeder', 'example_feeder', [dt.datetime(2025,1,1)]],
     ['port', 'njwp', [dt.datetime(2028, 1, 1)]],
 ],
 }
@@ -90,8 +94,8 @@ port = 400
 investments = {
     'year': [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2028, 2030, 2031, 2032],
     'base': [1270, 0, 0, 887, 0, 260, 0, 0, 0, 0, 0],
-    'us_wtiv': [1270, 0, 0, 887, 500, 1910, 1200, 0, 0, 0, 0],
-    'us_feeder': [1270, 0, 0, 887, 1100, 1910, 1200, 0, 0, 0, 0],
+    'us_wtiv': [1270, 0, 0, 887, 2550, 860, 200, 0, 0, 0, 0],
+    'us_feeder': [1270, 0, 0, 887, 2300, 860, 200, 0, 0, 0, 0],
 }  # Fixed bottom ports only
 
 plot_names_map = {
@@ -111,14 +115,14 @@ scenario_totals = {
     'us_wtiv': {
         'us_wtivs': 5,
         'foreign_wtivs': 1,
-        'hlvs': 5,
+        'hlvs': 6,
         'feeders': 4,
         'ports': 9
     },
     'us_feeder': {
-        'us_wtivs': 2,
-        'foreign_wtivs': 4,
-        'hlvs': 5,
+        'us_wtivs': 1,
+        'wtivs': 3,
+        'hlvs': 4,
         'feeders': 8,
         'ports': 9
     }
